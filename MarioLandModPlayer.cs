@@ -1,11 +1,13 @@
 ﻿using MarioLandMod.Buffs.PowerUp;
 using MarioLandMod.Buffs.Transformation;
+using MarioLandMod.Dusts;
 using MarioLandMod.Items.PowerUp;
 using MarioLandMod.Items.Transformation;
 using MarioLandMod.Items.Transformation.PowerUp;
 using MarioLandMod.UI;
 using System.Collections.Generic;
 using Terraria;
+using Terraria.Audio;
 using Terraria.DataStructures;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -94,6 +96,72 @@ namespace MarioLandMod
             }
         }
 
+        public int[] TransformationItems = new int[] { ModContent.ItemType<TransformationItemMario>() };
+        public int[] TransformationBuffs = new int[] { ModContent.BuffType<TransformationBuffMario>() };
+
+        public int[] PowerUpItems = new int[] { ModContent.ItemType<FireFlower>() };
+        public int[] PowerUpBuffs = new int[] { ModContent.BuffType<PowerupBuffFireFlower>() };
+
+        private void TransformationSwitch(int index, string name, bool on)
+        {
+            if (on)
+            {
+                if (!Player.HasBuff(TransformationBuffs[index]))
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOn"), Main.LocalPlayer.Center);
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Custom/Transformation/Transformation{name}"), Main.LocalPlayer.Center);
+                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
+                    }
+
+                    Player.AddBuff(TransformationBuffs[index], 2);
+                }
+            }
+            else
+            {
+                if (Player.HasBuff(TransformationBuffs[index]))
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOff"), Main.LocalPlayer.Center);
+                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
+                    }
+
+                    Player.ClearBuff(TransformationBuffs[index]);
+                }
+            }
+        }
+
+        private void PowerupSwitch(int index, bool on)
+        {
+            if (on)
+            {
+                if (!Player.HasBuff(PowerUpBuffs[index]))
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOn"), Main.LocalPlayer.Center);
+                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
+                    }
+                    Player.AddBuff(PowerUpBuffs[index], 2);
+                }
+            }
+            else
+            {
+                if (Player.HasBuff(PowerUpBuffs[index]))
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOff"), Main.LocalPlayer.Center);
+                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
+                    }
+
+                    Player.ClearBuff(PowerUpBuffs[index]);
+                }
+            }
+        }
+
         public override void PreUpdate()
         {
             TransformationActive_Mario = SlotUI.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
@@ -117,24 +185,26 @@ namespace MarioLandMod
 
                 if (TransformationActive_Mario)
                 {
-                    Player.AddBuff(ModContent.BuffType<TransformationBuffMario>(), 2);
+                    TransformationSwitch(0, "Mario", true);
 
                     if (PowerUpActive_FireFlower)
                     {
-                        Player.AddBuff(ModContent.BuffType<PowerupBuffFireFlower>(), 2);
+                        PowerupSwitch(0, true);
                     }
                     else
                     {
-                        Player.ClearBuff(ModContent.BuffType<PowerupBuffFireFlower>());
+                        PowerupSwitch(0, false);
                     }
+                }
+                else
+                {
+                    TransformationSwitch(0, "Mario", false);
                 }
             }
             else
             {
-                Player.ClearBuff(ModContent.BuffType<TransformationBuffMario>());
+                TransformationSwitch(0, "Mario", false);
             }
-
-            Main.NewText(PowerUpActive_FireFlower);
         }
 
         public override void FrameEffects()
