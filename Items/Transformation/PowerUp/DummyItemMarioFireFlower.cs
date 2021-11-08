@@ -3,10 +3,12 @@ using Terraria.ModLoader;
 
 namespace MarioLandMod.Items.Transformation.PowerUp
 {
-    public class DummyHatMarioFireFlower : ModItem
+    public class DummyItemMarioFireFlower : ModItem
     {
         public override void SetStaticDefaults()
         {
+            ItemID.Sets.Deprecated[Type] = true;
+
             SetupDrawing();
         }
 

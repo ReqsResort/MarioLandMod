@@ -4,7 +4,9 @@ using MarioLandMod.Dusts;
 using MarioLandMod.Items.PowerUp;
 using MarioLandMod.Items.Transformation;
 using MarioLandMod.Items.Transformation.PowerUp;
+using MarioLandMod.Projectiles;
 using MarioLandMod.UI;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
@@ -167,43 +169,26 @@ namespace MarioLandMod
             TransformationActive_Mario = SlotUI.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
             TransformationActive = TransformationActive_Mario;
 
-            PowerUpActive_FireFlower = SlotUI.PowerupSlot.Item.type == ModContent.ItemType<FireFlower>();
+            PowerUpActive_FireFlower = (TransformationActive_Mario) && SlotUI.PowerupSlot.Item.type == ModContent.ItemType<FireFlower>();
             PowerUpActive = PowerUpActive_FireFlower;
 
-            if (TransformationActive)
+            /* for (int i = 0; i < Player.MaxBuffs; i++)
             {
-                /* for (int i = 0; i < Player.MaxBuffs; i++)
+                if (Player.buffType[i] != ModContent.BuffType<TransformationBuffMario>())
                 {
-                    if (Player.buffType[i] != ModContent.BuffType<TransformationBuffMario>())
+                    if (Main.buffNoTimeDisplay[i])
                     {
-                        if (Main.buffNoTimeDisplay[i])
-                        {
-                            Player.ClearBuff(Player.buffType[i]);
-                        }
-                    }
-                } */
-
-                if (TransformationActive_Mario)
-                {
-                    TransformationSwitch(0, "Mario", true);
-
-                    if (PowerUpActive_FireFlower)
-                    {
-                        PowerupSwitch(0, true);
-                    }
-                    else
-                    {
-                        PowerupSwitch(0, false);
+                        Player.ClearBuff(Player.buffType[i]);
                     }
                 }
-                else
-                {
-                    TransformationSwitch(0, "Mario", false);
-                }
-            }
-            else
+            } */
+
+            TransformationSwitch(0, "Mario", TransformationActive_Mario);
+            PowerupSwitch(0, PowerUpActive_FireFlower);
+
+            if (PowerUpActive_FireFlower && Main.mouseLeft && Player.HeldItem.IsAir)
             {
-                TransformationSwitch(0, "Mario", false);
+                Projectile.NewProjectile(Player.GetProjectileSource_Buff(ModContent.BuffType<PowerupBuffFireFlower>()), Player.Center, new Vector2(5f * Player.direction, default), ModContent.ProjectileType<FireFlowerProjectile>(), 10, 2.5f, Player.whoAmI);
             }
         }
 
@@ -213,11 +198,11 @@ namespace MarioLandMod
             {
                 if (PowerUpActive_FireFlower)
                 {
-                    var DummyHatMarioFireFlower = ModContent.GetInstance<DummyHatMarioFireFlower>();
+                    var DummyItemMarioFireFlower = ModContent.GetInstance<DummyItemMarioFireFlower>();
 
-                    Player.head = Mod.GetEquipSlot(DummyHatMarioFireFlower.Name, EquipType.Head);
-                    Player.body = Mod.GetEquipSlot(DummyHatMarioFireFlower.Name, EquipType.Body);
-                    Player.legs = Mod.GetEquipSlot(DummyHatMarioFireFlower.Name, EquipType.Legs);
+                    Player.head = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Head);
+                    Player.body = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Body);
+                    Player.legs = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Legs);
                 }
                 else
                 {

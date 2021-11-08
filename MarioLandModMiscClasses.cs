@@ -6,6 +6,7 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using System.ComponentModel;
+using Terraria.ID;
 
 namespace MarioLandMod
 {
@@ -15,6 +16,41 @@ namespace MarioLandMod
         {
             return !Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive;
         } */
+
+        public override void OnHitNPC(Item item, Player player, NPC target, int damage, float knockBack, bool crit)
+        {
+            if (player.GetModPlayer<MarioLandModPlayer>().PowerUpActive_FireFlower)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+        }
+
+        public override void OnHitPvp(Item item, Player player, Player target, int damage, bool crit)
+        {
+            if (player.GetModPlayer<MarioLandModPlayer>().PowerUpActive_FireFlower)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+        }
+    }
+
+    public class MarioLandModGlobalProjectile : GlobalProjectile
+    {
+        public override void OnHitNPC(Projectile projectile, NPC target, int damage, float knockback, bool crit)
+        {
+            if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().PowerUpActive_FireFlower)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+        }
+
+        public override void OnHitPvp(Projectile projectile, Player target, int damage, bool crit)
+        {
+            if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().PowerUpActive_FireFlower)
+            {
+                target.AddBuff(BuffID.OnFire, 180);
+            }
+        }
     }
 
     #region Discord RPC
