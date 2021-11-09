@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.Audio;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -20,6 +21,7 @@ namespace MarioLandMod.Projectiles
             Projectile.aiStyle = -1;
             Projectile.penetrate = 1;
             Projectile.friendly = true;
+            Projectile.timeLeft = 600;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -52,9 +54,9 @@ namespace MarioLandMod.Projectiles
         {
             Projectile.rotation += 0.4f * Projectile.direction;
 
-            for (int d = 0; d < 3; d++)
+            for (int i = 0; i < 3; i++)
             {
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.FlameBurst, Projectile.velocity.X, Projectile.velocity.Y);
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y);
             }
 
             Projectile.velocity.Y += 0.4f;
@@ -63,6 +65,21 @@ namespace MarioLandMod.Projectiles
             {
                 Projectile.velocity.Y = 16f;
             }
+        }
+
+        public override void Kill(int timeLeft)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch);
+            }
+
+            for (int i = 0; i < 30; i++)
+            {
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke);
+            }
+
+            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/PowerUps/FireFlowerFireballKill"), Main.LocalPlayer.Center);
         }
     }
 }
