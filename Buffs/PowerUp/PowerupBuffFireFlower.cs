@@ -13,6 +13,7 @@ namespace MarioLandMod.Buffs.PowerUp
 
             Main.buffNoTimeDisplay[Type] = true;
             CanBeCleared = false;
+            Main.debuff[Type] = true;
         }
 
         public override void Update(Player player, ref int buffIndex)

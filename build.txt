@@ -1,5 +1,5 @@
 displayName = Mario Land Mod [c/ff0000:(ALPHA VERSION)]
 author = MLM Developers
-version = 0.0.9
+version = 0.0.10
 homepage = https://discord.gg/FdkEw35fye
 dllReferences = DiscordRPC

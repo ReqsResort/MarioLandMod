@@ -323,6 +323,7 @@ namespace MarioLandMod
                 }
             }
         }
+
         private void FireFlowerMechanics()
         {
             if (!Main.mouseLeft) JustPressedUseItem = false;

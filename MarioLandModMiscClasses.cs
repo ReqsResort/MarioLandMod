@@ -146,10 +146,7 @@ namespace MarioLandMod
                 }
             }
 
-            if (MarioLandModConfig.Instance.DiscordRPCOn)
-            {
-                Client?.SetPresence(Presence);
-            }
+            if (MarioLandModConfig.Instance.DiscordRPCOn) Client?.SetPresence(Presence);
 
             Cooldown = 0;
         }

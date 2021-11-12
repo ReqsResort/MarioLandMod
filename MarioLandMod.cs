@@ -1,4 +1,7 @@
+using MarioLandMod.Items.Transformation;
+using MarioLandMod.Items.Transformation.PowerUp;
 using MarioLandMod.UI;
+using MarioLandMod.UI.Elements;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Mono.Cecil.Cil;
@@ -21,28 +24,38 @@ namespace MarioLandMod
 
         int UIIndex;
 
-        Color Default = new(60, 72, 143);
-        Color Selected = new(156, 164, 229);
+        bool MarioLandModCategorySelected;
 
         UIElement MarioLandModCategoryContainer;
         UIColoredImageButton marioLandModCategoryButton;
 
-        UIImage TransformationButton;
-        UIImage TransformationButtonTexture;
-        readonly UIImage[] TransformationButtons = new UIImage[4];
-        readonly UIImage[] TransformationButtonTextures = new UIImage[4];
+        string[] Transformations = new string[] { "Mario", "Luigi", "Wario", "Waluigi" };
+        string[] PowerUps = new string[] { "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Jet Pot", "Jet Pot", "Jet Pot" };
 
-        UIText TransformationButtonInfoText;
+        TransformationSelectButton TransformationButton;
+        readonly TransformationSelectButton[] TransformationButtons = new TransformationSelectButton[4];
+
+        TransformationSelectButton PowerUpButton;
+        readonly TransformationSelectButton[] PowerUpButtons = new TransformationSelectButton[12];
 
         public bool MarioSelected = false;
         public bool LuigiSelected = false;
         public bool WarioSelected = false;
         public bool WaluigiSelected = false;
 
-        public bool MarioHover = false;
-        public bool LuigiHover = false;
-        public bool WarioHover = false;
-        public bool WaluigiHover = false;
+        public bool FireFlowerSelected = false;
+        public bool SuperLeafSelected = false;
+        public bool CapeFeatherSelected = false;
+        public bool FrogSuitSelected = false;
+        public bool JetPotSelected = false;
+        public bool BullPotSelected = false;
+        public bool DragonPotSelected = false;
+        public bool GarlicBundleSelected = false;
+
+        TransformationInfoPanel TransformationNamePanel;
+        TransformationInfoPanel PowerUpNamePanel;
+
+        UIText SelectedTransformationInfoText;
 
         private void MakeMarioLandModCategory(UIElement container)
         {
@@ -50,6 +63,15 @@ namespace MarioLandMod
             LuigiSelected = false;
             WarioSelected = false;
             WaluigiSelected = false;
+
+            FireFlowerSelected = false;
+            SuperLeafSelected = false;
+            CapeFeatherSelected = false;
+            FrogSuitSelected = false;
+            JetPotSelected = false;
+            BullPotSelected = false;
+            DragonPotSelected = false;
+            GarlicBundleSelected = false;
 
             UIElement uIElement = new()
             {
@@ -60,179 +82,226 @@ namespace MarioLandMod
             };
 
             container.Append(uIElement);
-
             MarioLandModCategoryContainer = uIElement;
-
-            string[] TransformationButtonImages = { "MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationSelectionButtonTexture_Mario", "MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationSelectionButtonTexture_Luigi", "MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationSelectionButtonTexture_Wario", "MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationSelectionButtonTexture_Waluigi" };
 
             for (int i = 0; i < 4; i++)
             {
-                TransformationButton = new(ModContent.Request<Texture2D>("MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationSelectionButtonBackground", AssetRequestMode.ImmediateLoad));
-
-                TransformationButtons[i] = TransformationButton;
-
-                TransformationButton.Color = Default;
-
-                if (i == 0)
+                TransformationButton = new($"MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationButtonTextures/TransformationButtonTexture{Transformations[i].Replace(" ", string.Empty)}")
                 {
-                    TransformationButton.HAlign = 0.01f;
-                    TransformationButton.VAlign = 0f;
-                }
-                else if (i == 1)
-                {
-                    TransformationButton.HAlign = 0.1425f;
-                    TransformationButton.VAlign = 0f;
-                }
-                else if (i == 2)
-                {
-                    TransformationButton.HAlign = 0.01f;
-                    TransformationButton.VAlign = 1f;
-                }
-                else if (i == 3)
-                {
-                    TransformationButton.HAlign = 0.1425f;
-                    TransformationButton.VAlign = 1f;
-                }
-
-                TransformationButtonTexture = new(ModContent.Request<Texture2D>(TransformationButtonImages[i], AssetRequestMode.ImmediateLoad))
-                {
-                    HAlign = 0.5f,
-                    VAlign = 0.5f
+                    Left = StyleDimension.FromPercent(((float)i / 11) + 0.01f)
                 };
-
-                TransformationButtonTextures[i] = TransformationButtonTexture;
-
-                TransformationButton.Append(TransformationButtonTexture);
+                TransformationButton.OnClick += TransformationButton_OnClick;
+                TransformationButton.OnMouseOver += TransformationButton_OnMouseOver;
+                TransformationButton.OnMouseOut += TransformationButton_OnMouseOut;
 
                 MarioLandModCategoryContainer.Append(TransformationButton);
+
+                TransformationButtons[i] = TransformationButton;
             }
 
-            UIPanel TransformationButtonInfoPanel = new()
+            for (int i = 0; i < 8; i++)
             {
-                Width = StyleDimension.FromPercent(0.73f),
+                PowerUpButton = new($"MarioLandMod/UI/Textures/TransformationSelectionUI/PowerUpButtonTextures/TransformationButtonTexture{PowerUps[i].Replace(" ", string.Empty)}")
+                {
+                    Left = StyleDimension.FromPercent((float)i / 11 + 0.01f),
+                    Top = StyleDimension.FromPixels(47f)
+                };
+
+                PowerUpButton.OnClick += PowerUpButton_OnClick; ;
+                PowerUpButton.OnMouseOver += TransformationButton_OnMouseOver;
+                PowerUpButton.OnMouseOut += TransformationButton_OnMouseOut;
+
+                PowerUpButtons[i] = PowerUpButton;
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                PowerUpButtons[i + 4].Left = StyleDimension.FromPercent((float)i / 11 + 0.01f);
+                MarioLandModCategoryContainer.Append(PowerUpButtons[i]);
+            }
+
+            TransformationNamePanel = new("No transformation selected", new Color(99, 107, 153))
+            {
+                Left = StyleDimension.FromPercent(0.01f),
+                Top = StyleDimension.FromPixels(96f)
+            };
+            MarioLandModCategoryContainer.Append(TransformationNamePanel);
+
+            PowerUpNamePanel = new("No PowerUp selected", new Color(99, 107, 153))
+            {
+                Left = StyleDimension.FromPercent(0.01f),
+                Top = StyleDimension.FromPixels(128f)
+            };
+            MarioLandModCategoryContainer.Append(PowerUpNamePanel);
+
+            UIPanel SelectedTransformationPanel = new()
+            {
+                Width = StyleDimension.FromPercent(0.61f),
                 Height = StyleDimension.FromPercent(1f),
-                VAlign = 0.5f,
-                HAlign = 0.97f,
+                Left = StyleDimension.FromPercent(0.375f),
                 BackgroundColor = new Color(99, 107, 153),
                 BorderColor = new Color(99, 107, 153)
             };
 
-            TransformationButtonInfoText = new("Select a transformation to begin with on your journey. If you don't want to start with a transformation, leave the menu like this.", 1f, false)
+            MarioLandModCategoryContainer.Append(SelectedTransformationPanel);
+
+            SelectedTransformationInfoText = new("Select a transformation and / or PowerUp to begin with on your journey, if you want.\n(You need to have a transformation selected in order to select a PowerUp)", 0.9f, false)
             {
                 HAlign = 0f,
                 VAlign = 0.5f,
-                PaddingLeft = 20f,
-                PaddingRight = 20f,
+                PaddingLeft = 10f,
+                PaddingRight = 10f,
                 Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
                 Height = StyleDimension.FromPixelsAndPercent(0f, 1f),
                 Top = StyleDimension.FromPixelsAndPercent(15f, 0f),
                 IsWrapped = true
             };
 
-            MarioLandModCategoryContainer.Append(TransformationButtonInfoPanel);
-            TransformationButtonInfoPanel.Append(TransformationButtonInfoText);
-
-
-            TransformationButtons[0].OnMouseDown += TransformationButton_OnMouseDown_Mario;
-            TransformationButtons[1].OnMouseDown += TransformationButton_OnMouseDown_Luigi;
-            TransformationButtons[2].OnMouseDown += TransformationButton_OnMouseDown_Wario;
-            TransformationButtons[3].OnMouseDown += TransformationButton_OnMouseDown_Waluigi;
+            SelectedTransformationPanel.Append(SelectedTransformationInfoText);
         }
 
-        private void TransformationButton_OnMouseDown_Mario(UIMouseEvent evt, UIElement listeningElement)
+        private void TransformationButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(12);
-            MarioSelected = !MarioSelected;
 
-            if (MarioSelected == true)
+            for (int i = 0; i < 4; i++)
             {
-                LuigiSelected = false;
-                WarioSelected = false;
-                WaluigiSelected = false;
+                if (listeningElement == TransformationButtons[i])
+                {
+                    TransformationButtons[i].SetClicked(!TransformationButtons[i].Clicked);
 
-                TransformationButtons[0].Color = Selected;
-                TransformationButtons[1].Color = Default;
-                TransformationButtons[2].Color = Default;
-                TransformationButtons[3].Color = Default;
-                TransformationButtonInfoText.SetText("Mario is an \"all-around\" transformation, with average stats. He can double and triple jump, hurt enemies from above with a jump or ground pound, and even swim indefinitely.");
+                    if (i == 0) MarioSelected = TransformationButtons[i].Clicked;
+                    if (i == 1) LuigiSelected = TransformationButtons[i].Clicked;
+                    if (i == 2) WarioSelected = TransformationButtons[i].Clicked;
+                    if (i == 3) WaluigiSelected = TransformationButtons[i].Clicked;
+                }
+                else
+                {
+                    TransformationButtons[i].SetClicked(false);
+                    if (i == 0) MarioSelected = false;
+                    if (i == 1) LuigiSelected = false;
+                    if (i == 2) WarioSelected = false;
+                    if (i == 3) WaluigiSelected = false;
+                }
             }
-            else
+
+            if (MarioSelected || LuigiSelected)
             {
-                TransformationButtons[0].Color = Default;
-                TransformationButtonInfoText.SetText("Select a transformation to begin with on your journey. If you don't want to start with a transformation, leave the menu like this.");
+                for (int i = 0; i < 8; i++)
+                {
+                    if (i < 4) MarioLandModCategoryContainer.Append(PowerUpButtons[i]);
+                    else PowerUpButtons[i].Remove();
+                }
+
+                JetPotSelected = false;
+                BullPotSelected = false;
+                DragonPotSelected = false;
+                GarlicBundleSelected = false;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    PowerUpButtons[i + 4].SetClicked(false);
+                }
+            }
+
+            if (WarioSelected)
+            {
+                for (int i = 0; i < 8; i++)
+                {
+                    if (i < 4) PowerUpButtons[i].Remove();
+                    else MarioLandModCategoryContainer.Append(PowerUpButtons[i]);
+                }
+
+                FireFlowerSelected = false;
+                SuperLeafSelected = false;
+                CapeFeatherSelected = false;
+                FrogSuitSelected = false;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    PowerUpButtons[i].SetClicked(false);
+                }
+            }
+
+            if (!MarioSelected && !LuigiSelected && !WarioSelected && !WaluigiSelected)
+            {
+                FireFlowerSelected = false;
+                SuperLeafSelected = false;
+                CapeFeatherSelected = false;
+                FrogSuitSelected = false;
+                JetPotSelected = false;
+                BullPotSelected = false;
+                DragonPotSelected = false;
+                GarlicBundleSelected = false;
+
+                for (int i = 0; i < 8; i++)
+                {
+                    PowerUpButtons[i].SetClicked(false);
+                }
             }
         }
 
-        private void TransformationButton_OnMouseDown_Luigi(UIMouseEvent evt, UIElement listeningElement)
+        private void PowerUpButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(12);
-            LuigiSelected = !LuigiSelected;
 
-            if (LuigiSelected == true)
+            if (MarioSelected || LuigiSelected || WarioSelected || WaluigiSelected)
             {
-                MarioSelected = false;
-                WarioSelected = false;
-                WaluigiSelected = false;
+                for (int i = 0; i < 8; i++)
+                {
+                    if (listeningElement == PowerUpButtons[i])
+                    {
+                        PowerUpButtons[i].SetClicked(!PowerUpButtons[i].Clicked);
 
-                TransformationButtons[0].Color = Default;
-                TransformationButtons[1].Color = Selected;
-                TransformationButtons[2].Color = Default;
-                TransformationButtons[3].Color = Default;
-                TransformationButtonInfoText.SetText("Luigi is very similar to Mario, but has a much higher triple jump. He's also the most slippy of the bunch, having the highest deceleration time");
-            }
-            else
-            {
-                TransformationButtons[1].Color = Default;
-                TransformationButtonInfoText.SetText("Select a transformation to begin with on your journey. If you don't want to start with a transformation, leave the menu like this.");
+                        if (i == 0) FireFlowerSelected = PowerUpButtons[i].Clicked;
+                        if (i == 1) SuperLeafSelected = PowerUpButtons[i].Clicked;
+                        if (i == 2) CapeFeatherSelected = PowerUpButtons[i].Clicked;
+                        if (i == 3) FrogSuitSelected = PowerUpButtons[i].Clicked;
+                        if (i == 4) JetPotSelected = PowerUpButtons[i].Clicked;
+                        if (i == 5) BullPotSelected = PowerUpButtons[i].Clicked;
+                        if (i == 6) DragonPotSelected = PowerUpButtons[i].Clicked;
+                        if (i == 7) GarlicBundleSelected = PowerUpButtons[i].Clicked;
+                    }
+                    else
+                    {
+                        PowerUpButtons[i].SetClicked(false);
+
+                        if (i == 0) FireFlowerSelected = false;
+                        if (i == 1) SuperLeafSelected = false;
+                        if (i == 2) CapeFeatherSelected = false;
+                        if (i == 3) FrogSuitSelected = false;
+                        if (i == 4) JetPotSelected = false;
+                        if (i == 5) BullPotSelected = false;
+                        if (i == 6) DragonPotSelected = false;
+                        if (i == 7) GarlicBundleSelected = false;
+                    }
+                }
             }
         }
 
-        private void TransformationButton_OnMouseDown_Wario(UIMouseEvent evt, UIElement listeningElement)
+        private void TransformationButton_OnMouseOver(UIMouseEvent evt, UIElement listeningElement)
         {
-            SoundEngine.PlaySound(12);
-            WarioSelected = !WarioSelected;
-
-            if (WarioSelected == true)
+            for (int i = 0; i < 4; i++)
             {
-                MarioSelected = false;
-                LuigiSelected = false;
-                WaluigiSelected = false;
-
-                TransformationButtons[0].Color = Default;
-                TransformationButtons[1].Color = Default;
-                TransformationButtons[2].Color = Selected;
-                TransformationButtons[3].Color = Default;
-                TransformationButtonInfoText.SetText("To be determined");
+                TransformationButtons[i].SetHovering(listeningElement == TransformationButtons[i]);
             }
-            else
-            {
-                TransformationButtons[2].Color = Default;
-                TransformationButtonInfoText.SetText("Select a transformation to begin with on your journey. If you don't want to start with a transformation, leave the menu like this.");
 
+            for (int i = 0; i < 8; i++)
+            {
+                PowerUpButtons[i].SetHovering(listeningElement == PowerUpButtons[i]);
             }
         }
 
-        private void TransformationButton_OnMouseDown_Waluigi(UIMouseEvent evt, UIElement listeningElement)
+        private void TransformationButton_OnMouseOut(UIMouseEvent evt, UIElement listeningElement)
         {
-            SoundEngine.PlaySound(12);
-            WaluigiSelected = !WaluigiSelected;
-
-            if (WaluigiSelected == true)
+            for (int i = 0; i < 4; i++)
             {
-                MarioSelected = false;
-                LuigiSelected = false;
-                WarioSelected = false;
-
-                TransformationButtons[0].Color = Default;
-                TransformationButtons[1].Color = Default;
-                TransformationButtons[2].Color = Default;
-                TransformationButtons[3].Color = Selected;
-                TransformationButtonInfoText.SetText("To be determined");
+                TransformationButtons[i].SetHovering(false);
             }
-            else
+
+            for (int i = 0; i < 8; i++)
             {
-                TransformationButtons[3].Color = Default;
-                TransformationButtonInfoText.SetText("Select a transformation to begin with on your journey. If you don't want to start with a transformation, leave the menu like this.");
+                PowerUpButtons[i].SetHovering(false);
             }
         }
 
@@ -247,6 +316,7 @@ namespace MarioLandMod
             (A.GetField("_middleContainer", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(self) as UIElement)
                 .Append(MarioLandModCategoryContainer);
             marioLandModCategoryButton.SetSelected(selected: true);
+            MarioLandModCategorySelected = true;
         }
 
         private void BuildPage(ILContext il)
@@ -342,6 +412,7 @@ namespace MarioLandMod
             orig(self);
             marioLandModCategoryButton.SetSelected(false);
             MarioLandModCategoryContainer.Remove();
+            MarioLandModCategorySelected = false;
         }
 
         private static UIColoredImageButton CreateColorPicker3(UICharacterCreation uicharCreation, int id, Asset<Texture2D> asset, float xPositionStart, float xPositionPerId)
@@ -378,6 +449,101 @@ namespace MarioLandMod
             c.Emit(OpCodes.Brfalse, statementFalse);
             c.Emit(OpCodes.Ret);
             c.MarkLabel(statementFalse);
+        }
+
+        private void UICharacterCreation_Draw(On.Terraria.GameContent.UI.States.UICharacterCreation.orig_Draw orig, UICharacterCreation self, SpriteBatch spriteBatch)
+        {
+            if (MarioLandModCategorySelected)
+            {
+                if (MarioSelected)
+                {
+                    TransformationNamePanel.SetText("Mario selected");
+                    TransformationNamePanel.SetColour(new Color(255, 0, 0));
+
+                    if (FireFlowerSelected)
+                    {
+                        var DummyItemMarioFireFlower = ModContent.GetInstance<DummyItemMarioFireFlower>();
+
+                        Main.PendingPlayer.head = GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Head);
+                        Main.PendingPlayer.body = GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Body);
+                        Main.PendingPlayer.legs = GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Legs);
+                    }
+                    else
+                    {
+                        var TransformationItemMario = ModContent.GetInstance<TransformationItemMario>();
+
+                        Main.PendingPlayer.head = GetEquipSlot(TransformationItemMario.Name, EquipType.Head);
+                        Main.PendingPlayer.body = GetEquipSlot(TransformationItemMario.Name, EquipType.Body);
+                        Main.PendingPlayer.legs = GetEquipSlot(TransformationItemMario.Name, EquipType.Legs);
+                    }
+                }
+                
+                if (!MarioSelected && !LuigiSelected && !WarioSelected && !WaluigiSelected)
+                {
+                    TransformationNamePanel.SetText("No transformation selected");
+                    TransformationNamePanel.SetColour(new Color(99, 107, 153));
+                }
+                else
+                {
+                    if (MarioSelected)
+                    {
+                        TransformationNamePanel.SetText("Mario selected");
+                        TransformationNamePanel.SetColour(new Color(255, 0, 0));
+                    }
+
+                    if (LuigiSelected)
+                    {
+                        TransformationNamePanel.SetText("Luigi selected");
+                        TransformationNamePanel.SetColour(new Color(0, 255, 0));
+                    }
+
+                    if (WarioSelected)
+                    {
+                        TransformationNamePanel.SetText("Wario selected");
+                        TransformationNamePanel.SetColour(new Color(255, 255, 0));
+                    }
+
+                    if (WaluigiSelected)
+                    {
+                        TransformationNamePanel.SetText("Waluigi selected");
+                        TransformationNamePanel.SetColour(new Color(160, 32, 240));
+                    }
+                }
+
+                if (!FireFlowerSelected && !SuperLeafSelected && !CapeFeatherSelected && !FrogSuitSelected && (!MarioSelected || !LuigiSelected))
+                {
+                    PowerUpNamePanel.SetText("No PowerUp selected");
+                    PowerUpNamePanel.SetColour(new Color(99, 107, 153));
+                }
+                else
+                {
+                    if (FireFlowerSelected)
+                    {
+                        PowerUpNamePanel.SetText("Fire Flower selected");
+                        PowerUpNamePanel.SetColour(new Color(242, 123, 53));
+                    }
+
+                    if (SuperLeafSelected)
+                    {
+                        PowerUpNamePanel.SetText("Super Leaf selected");
+                        PowerUpNamePanel.SetColour(new Color(140, 60, 31));
+                    }
+
+                    if (CapeFeatherSelected)
+                    {
+                        PowerUpNamePanel.SetText("Cape Feather selected");
+                        PowerUpNamePanel.SetColour(new Color(242, 195, 53));
+                    }
+
+                    if (FrogSuitSelected)
+                    {
+                        PowerUpNamePanel.SetText("Frog Suit selected");
+                        PowerUpNamePanel.SetColour(new Color(25, 115, 82));
+                    }
+                }
+            }
+
+            orig(self, spriteBatch);
         }
 
         #endregion
@@ -428,6 +594,7 @@ namespace MarioLandMod
             IL.Terraria.GameContent.UI.States.UICharacterCreation.MakeClothStylesMenu += MakeClothStylesMenu;
             IL.Terraria.GameContent.UI.States.UICharacterCreation.MakeHairsylesMenu += MakeHairsylesMenu;
             On.Terraria.GameContent.UI.States.UICharacterCreation.UnselectAllCategories += UnselectAllCategories;
+            On.Terraria.GameContent.UI.States.UICharacterCreation.Draw += UICharacterCreation_Draw;
 
             /* On.Terraria.Player.UpdateEquips += UpdateEquips;
             On.Terraria.Player.UpdateArmorSets += UpdateArmorSets;
