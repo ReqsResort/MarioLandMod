@@ -140,8 +140,8 @@ namespace MarioLandMod
                 }
                 else
                 {
-                    Client.UpdateDetails($"Running around as {SlotUI.TransformationSlot.Item.Name.Split("'")[0]}");
-                    Client.UpdateSmallAsset(SlotUI.TransformationSlot.Item.Name.Split("'")[0].ToLower());
+                    Client.UpdateDetails($"Running around as {MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0]}");
+                    Client.UpdateSmallAsset(MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0].ToLower());
                     Client.UpdateState("");
                 }
             }

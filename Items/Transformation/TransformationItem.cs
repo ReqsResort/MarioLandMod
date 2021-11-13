@@ -14,18 +14,18 @@ namespace MarioLandMod.Items.Transformation
 
         public override void RightClick(Player player)
         {
-            if (SlotUI.TransformationSlot.Item.type != ItemID.None && SlotUI.TransformationSlot.Item != Item)
+            if (MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.type != ItemID.None && MarioLandModSystem.SlotUIInstance.TransformationSlot.Item != Item)
             {
                 for (int i = 0; i < Main.InventorySlotsTotal; i++)
                 {
-                    if (player.inventory[i] == Item && player.inventory[i] != SlotUI.TransformationSlot.Item)
+                    if (player.inventory[i] == Item && player.inventory[i] != MarioLandModSystem.SlotUIInstance.TransformationSlot.Item)
                     {
-                        player.inventory[i] = SlotUI.TransformationSlot.Item;
+                        player.inventory[i] = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item;
                     }
                 }
             }
 
-            SlotUI.TransformationSlot.Item = Item.Clone();
+            MarioLandModSystem.SlotUIInstance.TransformationSlot.Item = Item.Clone();
         }
     }
 }

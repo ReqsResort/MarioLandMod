@@ -12,15 +12,15 @@ namespace MarioLandMod
         #region Slot UI
 
         private UserInterface SlotUIUserInterface;
-        internal SlotUI SlotUI = new();
+        internal static SlotUI SlotUIInstance = new();
 
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                SlotUI.Activate();
+                SlotUIInstance.Activate();
                 SlotUIUserInterface = new UserInterface();
-                SlotUIUserInterface.SetState(SlotUI);
+                SlotUIUserInterface.SetState(SlotUIInstance);
             }
         }
 

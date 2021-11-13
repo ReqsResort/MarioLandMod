@@ -14,18 +14,18 @@ namespace MarioLandMod.Items.PowerUp
 
         public override void RightClick(Player player)
         {
-            if (SlotUI.PowerupSlot.Item.type != ItemID.None && SlotUI.PowerupSlot.Item != Item)
+            if (MarioLandModSystem.SlotUIInstance.PowerupSlot.Item.type != ItemID.None && MarioLandModSystem.SlotUIInstance.PowerupSlot.Item != Item)
             {
                 for (int i = 0; i < Main.InventorySlotsTotal; i++)
                 {
-                    if (player.inventory[i] == Item && player.inventory[i] != SlotUI.PowerupSlot.Item)
+                    if (player.inventory[i] == Item && player.inventory[i] != MarioLandModSystem.SlotUIInstance.PowerupSlot.Item)
                     {
-                        player.inventory[i] = SlotUI.PowerupSlot.Item;
+                        player.inventory[i] = MarioLandModSystem.SlotUIInstance.PowerupSlot.Item;
                     }
                 }
             }
 
-            SlotUI.PowerupSlot.Item = Item.Clone();
+            MarioLandModSystem.SlotUIInstance.PowerupSlot.Item = Item.Clone();
         }
     }
 }

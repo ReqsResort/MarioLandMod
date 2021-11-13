@@ -578,7 +578,7 @@ namespace MarioLandMod
             {
                 if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive)
                 {
-                    orig(SlotUI.DyeSlot.Item.dye, out localShaderIndex, out shaderType);
+                    orig(MarioLandModSystem.SlotUIInstance.DyeSlot.Item.dye, out localShaderIndex, out shaderType);
                     return;
                 }
             }

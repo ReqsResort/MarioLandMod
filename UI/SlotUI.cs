@@ -16,9 +16,9 @@ namespace MarioLandMod.UI
             get => Main.playerInventory;
         }
 
-        public static TexturedCustomItemSlot TransformationSlot;
-        public static TexturedCustomItemSlot PowerupSlot;
-        public static CustomItemSlot DyeSlot;
+        public TexturedCustomItemSlot TransformationSlot;
+        public TexturedCustomItemSlot PowerupSlot;
+        public CustomItemSlot DyeSlot;
 
         public override void OnInitialize()
         {

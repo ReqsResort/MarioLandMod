@@ -41,26 +41,26 @@ namespace MarioLandMod
 
         public override void SaveData(TagCompound tag)
         {
-            tag["TransformationItem"] = SlotUI.TransformationSlot.Item;
-            tag["PowerupItem"] = SlotUI.PowerupSlot.Item;
-            tag["DyeItem"] = SlotUI.DyeSlot.Item;
+            tag["TransformationItem"] = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item;
+            tag["PowerupItem"] = MarioLandModSystem.SlotUIInstance.PowerupSlot.Item;
+            tag["DyeItem"] = MarioLandModSystem.SlotUIInstance.DyeSlot.Item;
         }
 
         public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey("TransformationItem"))
             {
-                SlotUI.TransformationSlot.Item = tag.Get<Item>("TransformationItem");
+                MarioLandModSystem.SlotUIInstance.TransformationSlot.Item = tag.Get<Item>("TransformationItem");
             }
 
             if (tag.ContainsKey("PowerupItem"))
             {
-                SlotUI.PowerupSlot.Item = tag.Get<Item>("PowerupItem");
+                MarioLandModSystem.SlotUIInstance.PowerupSlot.Item  = tag.Get<Item>("PowerupItem");
             }
 
             if (tag.ContainsKey("DyeItem"))
             {
-                SlotUI.DyeSlot.Item = tag.Get<Item>("DyeItem");
+                MarioLandModSystem.SlotUIInstance.DyeSlot.Item = tag.Get<Item>("DyeItem");
             }
         }
 
@@ -70,17 +70,20 @@ namespace MarioLandMod
 
         public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
         {
+            var itemList = new List<Item>();
+
             Item Nothing = new(ItemID.None);
 
             Item TransformationItem_Mario = new(ModContent.ItemType<TransformationItemMario>());
+            Item FireFlower = new(ModContent.ItemType<FireFlower>());
 
-            if (ModContent.GetInstance<MarioLandMod>().MarioSelected)
+            if (!ModContent.GetInstance<MarioLandMod>().MarioSelected && !ModContent.GetInstance<MarioLandMod>().LuigiSelected && !ModContent.GetInstance<MarioLandMod>().WarioSelected && !ModContent.GetInstance<MarioLandMod>().WaluigiSelected && !ModContent.GetInstance<MarioLandMod>().FireFlowerSelected && !ModContent.GetInstance<MarioLandMod>().SuperLeafSelected && !ModContent.GetInstance<MarioLandMod>().CapeFeatherSelected && !ModContent.GetInstance<MarioLandMod>().FrogSuitSelected)
             {
-                return new List<Item>() { TransformationItem_Mario };
+                return itemList;
             }
             else
             {
-                return new List<Item>() { Nothing };
+                return itemList;
             }
         }
 
@@ -97,15 +100,17 @@ namespace MarioLandMod
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
+            MarioLandModSystem MarioLandModSystem = new();
+
             if (TransformationActive)
             {
-                if (SlotUI.DyeSlot.Item.IsAir)
+                if (MarioLandModSystem.SlotUIInstance.DyeSlot.Item.IsAir)
                 {
                     Player.cHead = Player.cBody = Player.cLegs = 0;
                 }
                 else
                 {
-                    Player.cHead = Player.cBody = Player.cLegs = SlotUI.DyeSlot.Item.dye;
+                    Player.cHead = Player.cBody = Player.cLegs = MarioLandModSystem.SlotUIInstance.DyeSlot.Item.dye;
                 }
             }
         }
@@ -178,10 +183,10 @@ namespace MarioLandMod
 
         public override void PreUpdate()
         {
-            TransformationActive_Mario = SlotUI.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
+            TransformationActive_Mario = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
             TransformationActive = TransformationActive_Mario;
 
-            PowerUpActive_FireFlower = (TransformationActive_Mario) && SlotUI.PowerupSlot.Item.type == ModContent.ItemType<FireFlower>();
+            PowerUpActive_FireFlower = (TransformationActive_Mario) && MarioLandModSystem.SlotUIInstance.PowerupSlot.Item.type == ModContent.ItemType<FireFlower>();
             PowerUpActive = PowerUpActive_FireFlower;
 
             /* for (int i = 0; i < Player.MaxBuffs; i++)
