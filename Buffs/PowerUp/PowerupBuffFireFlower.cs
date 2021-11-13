@@ -1,10 +1,9 @@
 ﻿using Terraria;
-using Terraria.GameInput;
 using Terraria.ModLoader;
 
 namespace MarioLandMod.Buffs.PowerUp
 {
-    public class PowerupBuffFireFlower : ModBuff
+    public class PowerUpBuffFireFlower : ModBuff
     {
         public override void SetStaticDefaults()
         {

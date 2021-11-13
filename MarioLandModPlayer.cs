@@ -42,7 +42,7 @@ namespace MarioLandMod
         public override void SaveData(TagCompound tag)
         {
             tag["TransformationItem"] = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item;
-            tag["PowerupItem"] = MarioLandModSystem.SlotUIInstance.PowerupSlot.Item;
+            tag["PowerUpItem"] = MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item;
             tag["DyeItem"] = MarioLandModSystem.SlotUIInstance.DyeSlot.Item;
         }
 
@@ -53,9 +53,9 @@ namespace MarioLandMod
                 MarioLandModSystem.SlotUIInstance.TransformationSlot.Item = tag.Get<Item>("TransformationItem");
             }
 
-            if (tag.ContainsKey("PowerupItem"))
+            if (tag.ContainsKey("PowerUpItem"))
             {
-                MarioLandModSystem.SlotUIInstance.PowerupSlot.Item  = tag.Get<Item>("PowerupItem");
+                MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item  = tag.Get<Item>("PowerUpItem");
             }
 
             if (tag.ContainsKey("DyeItem"))
@@ -100,8 +100,6 @@ namespace MarioLandMod
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-            MarioLandModSystem MarioLandModSystem = new();
-
             if (TransformationActive)
             {
                 if (MarioLandModSystem.SlotUIInstance.DyeSlot.Item.IsAir)
@@ -119,7 +117,7 @@ namespace MarioLandMod
         public int[] TransformationBuffs = new int[] { ModContent.BuffType<TransformationBuffMario>() };
 
         public int[] PowerUpItems = new int[] { ModContent.ItemType<FireFlower>() };
-        public int[] PowerUpBuffs = new int[] { ModContent.BuffType<PowerupBuffFireFlower>() };
+        public int[] PowerUpBuffs = new int[] { ModContent.BuffType<PowerUpBuffFireFlower>() };
 
         private void TransformationSwitch(int index, string name, bool on)
         {
@@ -152,7 +150,7 @@ namespace MarioLandMod
             }
         }
 
-        private void PowerupSwitch(int index, bool on)
+        private void PowerUpSwitch(int index, bool on)
         {
             if (on)
             {
@@ -186,7 +184,7 @@ namespace MarioLandMod
             TransformationActive_Mario = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
             TransformationActive = TransformationActive_Mario;
 
-            PowerUpActive_FireFlower = (TransformationActive_Mario) && MarioLandModSystem.SlotUIInstance.PowerupSlot.Item.type == ModContent.ItemType<FireFlower>();
+            PowerUpActive_FireFlower = (TransformationActive_Mario) && MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item.type == ModContent.ItemType<FireFlower>();
             PowerUpActive = PowerUpActive_FireFlower;
 
             /* for (int i = 0; i < Player.MaxBuffs; i++)
@@ -201,7 +199,7 @@ namespace MarioLandMod
             } */
 
             TransformationSwitch(0, "Mario", TransformationActive_Mario);
-            PowerupSwitch(0, PowerUpActive_FireFlower);
+            PowerUpSwitch(0, PowerUpActive_FireFlower);
 
             if (TransformationActive)
             {
@@ -353,7 +351,7 @@ namespace MarioLandMod
                 if (!JustPressedUseItem)
                 {
                     SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/PowerUps/FireFlowerFireball"), Main.LocalPlayer.Center);
-                    Projectile.NewProjectile(Player.GetProjectileSource_Buff(Player.FindBuffIndex(ModContent.BuffType<PowerupBuffFireFlower>())), Player.Center, new Vector2(5f * Player.direction, default), ModContent.ProjectileType<FireFlowerProjectile>(), 10, 2.5f, Player.whoAmI);
+                    Projectile.NewProjectile(Player.GetProjectileSource_Buff(Player.FindBuffIndex(ModContent.BuffType<PowerUpBuffFireFlower>())), Player.Center, new Vector2(5f * Player.direction, default), ModContent.ProjectileType<FireFlowerProjectile>(), 10, 2.5f, Player.whoAmI);
 
                     JustPressedUseItem = true;
                     BurstCount++;
