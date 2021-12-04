@@ -1,6 +1,5 @@
 ﻿using DiscordRPC;
 using Steamworks;
-using MarioLandMod.UI;
 using System;
 using Terraria;
 using Terraria.ModLoader;
@@ -140,8 +139,8 @@ namespace MarioLandMod
                 }
                 else
                 {
-                    Client.UpdateDetails($"Running around as {MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0]}");
-                    Client.UpdateSmallAsset(MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0].ToLower());
+                    Client.UpdateDetails($"Running around as {MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0]}");
+                    Client.UpdateSmallAsset(MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0].ToLower());
                     Client.UpdateState("");
                 }
             }

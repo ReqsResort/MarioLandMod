@@ -7,6 +7,7 @@ namespace MarioLandMod.Items.Transformation
 {
     public abstract class PowerUpItem : ModItem
     {
+        MarioLandModPlayer MarioLandModPlayer = new();
         public override bool CanRightClick()
         {
             return true;
@@ -14,18 +15,18 @@ namespace MarioLandMod.Items.Transformation
 
         public override void RightClick(Player player)
         {
-            if (MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.type != ItemID.None && MarioLandModSystem.SlotUIInstance.TransformationSlot.Item != Item)
+            if (MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item.type != ItemID.None && MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item != Item)
             {
                 for (int i = 0; i < Main.InventorySlotsTotal; i++)
                 {
-                    if (player.inventory[i] == Item && player.inventory[i] != MarioLandModSystem.SlotUIInstance.TransformationSlot.Item)
+                    if (player.inventory[i] == Item && player.inventory[i] != MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item)
                     {
-                        player.inventory[i] = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item;
+                        player.inventory[i] = Item.CloneWithModdedDataFrom(MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item);
                     }
                 }
             }
 
-            MarioLandModSystem.SlotUIInstance.TransformationSlot.Item = Item.Clone();
+            MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item = Item.Clone();
         }
     }
 }

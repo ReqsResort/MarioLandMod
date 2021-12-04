@@ -7,6 +7,7 @@ namespace MarioLandMod.Items.PowerUp
 {
     public abstract class PowerUpItem : ModItem
     {
+        MarioLandModPlayer MarioLandModPlayer = new();
         public override bool CanRightClick()
         {
             return true;
@@ -14,18 +15,18 @@ namespace MarioLandMod.Items.PowerUp
 
         public override void RightClick(Player player)
         {
-            if (MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item.type != ItemID.None && MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item != Item)
+            if (MarioLandModPlayer.SlotUIInstance.PowerUpSlot.Item.type != ItemID.None && MarioLandModPlayer.SlotUIInstance.PowerUpSlot.Item != Item)
             {
                 for (int i = 0; i < Main.InventorySlotsTotal; i++)
                 {
-                    if (player.inventory[i] == Item && player.inventory[i] != MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item)
+                    if (player.inventory[i] == Item && player.inventory[i] != MarioLandModPlayer.SlotUIInstance.PowerUpSlot.Item)
                     {
-                        player.inventory[i] = MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item;
+                        player.inventory[i] = Item.CloneWithModdedDataFrom(MarioLandModPlayer.SlotUIInstance.PowerUpSlot.Item);
                     }
                 }
             }
 
-            MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item = Item.Clone();
+            MarioLandModPlayer.SlotUIInstance.PowerUpSlot.Item = Item.Clone();
         }
     }
 }

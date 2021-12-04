@@ -20,6 +20,8 @@ namespace MarioLandMod
 {
     public class MarioLandModPlayer : ModPlayer
     {
+        internal SlotUI SlotUIInstance = new();
+
         public bool TransformationActive;
         public bool TransformationActive_Mario;
 
@@ -41,26 +43,26 @@ namespace MarioLandMod
 
         public override void SaveData(TagCompound tag)
         {
-            tag["TransformationItem"] = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item;
-            tag["PowerUpItem"] = MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item;
-            tag["DyeItem"] = MarioLandModSystem.SlotUIInstance.DyeSlot.Item;
+            tag["TransformationItem"] = SlotUIInstance.TransformationSlot.Item;
+            tag["PowerUpItem"] = SlotUIInstance.PowerUpSlot.Item;
+            tag["DyeItem"] = SlotUIInstance.DyeSlot.Item;
         }
 
         public override void LoadData(TagCompound tag)
         {
             if (tag.ContainsKey("TransformationItem"))
             {
-                MarioLandModSystem.SlotUIInstance.TransformationSlot.Item = tag.Get<Item>("TransformationItem");
+                SlotUIInstance.TransformationSlot.Item = tag.Get<Item>("TransformationItem");
             }
 
             if (tag.ContainsKey("PowerUpItem"))
             {
-                MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item  = tag.Get<Item>("PowerUpItem");
+                SlotUIInstance.PowerUpSlot.Item = tag.Get<Item>("PowerUpItem");
             }
 
             if (tag.ContainsKey("DyeItem"))
             {
-                MarioLandModSystem.SlotUIInstance.DyeSlot.Item = tag.Get<Item>("DyeItem");
+                SlotUIInstance.DyeSlot.Item = tag.Get<Item>("DyeItem");
             }
         }
 
@@ -102,13 +104,13 @@ namespace MarioLandMod
         {
             if (TransformationActive)
             {
-                if (MarioLandModSystem.SlotUIInstance.DyeSlot.Item.IsAir)
+                if (SlotUIInstance.DyeSlot.Item.IsAir)
                 {
                     Player.cHead = Player.cBody = Player.cLegs = 0;
                 }
                 else
                 {
-                    Player.cHead = Player.cBody = Player.cLegs = MarioLandModSystem.SlotUIInstance.DyeSlot.Item.dye;
+                    Player.cHead = Player.cBody = Player.cLegs = SlotUIInstance.DyeSlot.Item.dye;
                 }
             }
         }
@@ -181,10 +183,10 @@ namespace MarioLandMod
 
         public override void PreUpdate()
         {
-            TransformationActive_Mario = MarioLandModSystem.SlotUIInstance.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
+            TransformationActive_Mario = SlotUIInstance.TransformationSlot.Item.type == ModContent.ItemType<TransformationItemMario>();
             TransformationActive = TransformationActive_Mario;
 
-            PowerUpActive_FireFlower = (TransformationActive_Mario) && MarioLandModSystem.SlotUIInstance.PowerUpSlot.Item.type == ModContent.ItemType<FireFlower>();
+            PowerUpActive_FireFlower = (TransformationActive_Mario) && SlotUIInstance.PowerUpSlot.Item.type == ModContent.ItemType<FireFlower>();
             PowerUpActive = PowerUpActive_FireFlower;
 
             /* for (int i = 0; i < Player.MaxBuffs; i++)
@@ -331,7 +333,7 @@ namespace MarioLandMod
         {
             if (!Main.mouseLeft) JustPressedUseItem = false;
 
-            if (BurstCount >= 3)
+            if (BurstCount >= 2)
             {
                 FireFlowerCooldownTimer--;
             }
@@ -343,10 +345,10 @@ namespace MarioLandMod
             if (FireFlowerCooldownTimer <= 0 || BurstCooldownTimer >= 15)
             {
                 BurstCount = 0;
-                FireFlowerCooldownTimer = 60;
+                FireFlowerCooldownTimer = 100;
             }
 
-            if (PowerUpActive_FireFlower && Main.mouseLeft && Player.HeldItem.IsAir && BurstCount <= 3 && FireFlowerCooldownTimer == 60)
+            if (PowerUpActive_FireFlower && Main.mouseLeft && Player.HeldItem.IsAir && BurstCount <= 2 && FireFlowerCooldownTimer == 100)
             {
                 if (!JustPressedUseItem)
                 {

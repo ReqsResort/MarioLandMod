@@ -54,7 +54,7 @@ namespace MarioLandMod.Projectiles
         {
             Projectile.rotation += 0.4f * Projectile.direction;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y);
             }
@@ -69,7 +69,7 @@ namespace MarioLandMod.Projectiles
 
         public override void Kill(int timeLeft)
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch);
             }

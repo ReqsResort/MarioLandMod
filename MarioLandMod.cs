@@ -20,6 +20,7 @@ namespace MarioLandMod
 {
     public class MarioLandMod : Mod
     {
+        MarioLandModPlayer MarioLandModPlayer = new();
         #region Transformation Selection UI
 
         int UIIndex;
@@ -578,7 +579,7 @@ namespace MarioLandMod
             {
                 if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive)
                 {
-                    orig(MarioLandModSystem.SlotUIInstance.DyeSlot.Item.dye, out localShaderIndex, out shaderType);
+                    orig(MarioLandModPlayer.SlotUIInstance.DyeSlot.Item.dye, out localShaderIndex, out shaderType);
                     return;
                 }
             }

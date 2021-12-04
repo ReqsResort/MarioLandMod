@@ -9,18 +9,18 @@ namespace MarioLandMod
 {
     public class MarioLandModSystem : ModSystem
     {
+        MarioLandModPlayer MarioLandModPlayer = new();
         #region Slot UI
 
         private UserInterface SlotUIUserInterface;
-        internal static SlotUI SlotUIInstance = new();
 
         public override void Load()
         {
             if (!Main.dedServ)
             {
-                SlotUIInstance.Activate();
+                MarioLandModPlayer.SlotUIInstance.Activate();
                 SlotUIUserInterface = new UserInterface();
-                SlotUIUserInterface.SetState(SlotUIInstance);
+                SlotUIUserInterface.SetState(MarioLandModPlayer.SlotUIInstance);
             }
         }
 
