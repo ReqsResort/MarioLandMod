@@ -6,6 +6,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using System.ComponentModel;
 using Terraria.ID;
+using MarioLandMod.UI;
 
 namespace MarioLandMod
 {
@@ -139,8 +140,8 @@ namespace MarioLandMod
                 }
                 else
                 {
-                    Client.UpdateDetails($"Running around as {MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0]}");
-                    Client.UpdateSmallAsset(MarioLandModPlayer.SlotUIInstance.TransformationSlot.Item.Name.Split("'")[0].ToLower());
+                    Client.UpdateDetails($"Running around as {ModContent.GetInstance<SlotUI>().FunctionalItem.Name.Split("'")[0]}");
+                    Client.UpdateSmallAsset(ModContent.GetInstance<SlotUI>().FunctionalItem.Name.Split("'")[0].ToLower());
                     Client.UpdateState("");
                 }
             }

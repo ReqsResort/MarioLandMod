@@ -1,3 +1,4 @@
+using MarioLandMod.Items.PowerUp;
 using MarioLandMod.Items.Transformation;
 using MarioLandMod.Items.Transformation.PowerUp;
 using MarioLandMod.UI;
@@ -20,7 +21,7 @@ namespace MarioLandMod
 {
     public class MarioLandMod : Mod
     {
-        MarioLandModPlayer MarioLandModPlayer = new();
+
         #region Transformation Selection UI
 
         int UIIndex;
@@ -478,7 +479,7 @@ namespace MarioLandMod
                         Main.PendingPlayer.legs = GetEquipSlot(TransformationItemMario.Name, EquipType.Legs);
                     }
                 }
-                
+
                 if (!MarioSelected && !LuigiSelected && !WarioSelected && !WaluigiSelected)
                 {
                     TransformationNamePanel.SetText("No transformation selected");
@@ -579,12 +580,17 @@ namespace MarioLandMod
             {
                 if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive)
                 {
-                    orig(MarioLandModPlayer.SlotUIInstance.DyeSlot.Item.dye, out localShaderIndex, out shaderType);
+                    orig(ModContent.GetInstance<SlotUI>().DyeItem.dye, out localShaderIndex, out shaderType);
                     return;
                 }
             }
 
             orig(packedShaderIndex, out localShaderIndex, out shaderType);
+        }
+
+        private bool ItemSlot_AccessorySwap(On.Terraria.UI.ItemSlot.orig_AccessorySwap orig, Player player, Item item, ref Item result)
+        {
+            return !(item.type == ModContent.ItemType<TransformationItemMario>() || item.type == ModContent.ItemType<FireFlower>());
         }
 
         public override void Load()
@@ -601,6 +607,7 @@ namespace MarioLandMod
             On.Terraria.Player.UpdateArmorSets += UpdateArmorSets;
             On.Terraria.Player.UpdateVisibleAccessories += UpdateVisibleAccessories; */
             On.Terraria.DataStructures.PlayerDrawHelper.UnpackShader += UnpackShader;
+            On.Terraria.UI.ItemSlot.AccessorySwap += ItemSlot_AccessorySwap;
 
             if (!Main.dedServ)
             {

@@ -4,7 +4,7 @@ using Terraria;
 
 namespace MarioLandMod.Items.PowerUp
 {
-    public class FireFlower : PowerUpItem
+    public class FireFlower : ModItem
     {
         public override void SetDefaults()
         {
@@ -12,6 +12,13 @@ namespace MarioLandMod.Items.PowerUp
             Item.height = 32;
             Item.maxStack = 1;
             Item.rare = ItemRarityID.Orange;
+            Item.accessory = true;
+
+        }
+
+        public override bool CanEquipAccessory(Player player, int slot, bool modded)
+        {
+            return modded;
         }
     }
 }

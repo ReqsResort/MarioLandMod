@@ -5,7 +5,7 @@ using Terraria.ModLoader;
 
 namespace MarioLandMod.Items.Transformation
 {
-    public class TransformationItemMario : PowerUpItem
+    public class TransformationItemMario : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -21,6 +21,7 @@ namespace MarioLandMod.Items.Transformation
             Item.height = 20;
             Item.value = 0;
             Item.rare = ItemRarityID.Red;
+            Item.accessory = true;
         }
 
         public override void Load()
@@ -37,10 +38,15 @@ namespace MarioLandMod.Items.Transformation
             int MarioNormalLegs = Mod.GetEquipSlot(Name, EquipType.Legs);
 
 
-                ArmorIDs.Head.Sets.DrawHead[MarioNormalHead] = false;
-                ArmorIDs.Body.Sets.HidesTopSkin[MarioNormalBody] = true;
-                ArmorIDs.Body.Sets.HidesArms[MarioNormalBody] = true;
-                ArmorIDs.Legs.Sets.HidesBottomSkin[MarioNormalLegs] = true;
+            ArmorIDs.Head.Sets.DrawHead[MarioNormalHead] = false;
+            ArmorIDs.Body.Sets.HidesTopSkin[MarioNormalBody] = true;
+            ArmorIDs.Body.Sets.HidesArms[MarioNormalBody] = true;
+            ArmorIDs.Legs.Sets.HidesBottomSkin[MarioNormalLegs] = true;
+        }
+
+        public override bool CanEquipAccessory(Player player, int slot, bool modded)
+        {
+            return modded;
         }
     }
 }
