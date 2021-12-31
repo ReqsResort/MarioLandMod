@@ -1,7 +1,7 @@
 ﻿using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace MarioLandMod.Items.Transformation.PowerUp
+namespace MarioLandMod.Items.Transformation.PowerUp.Mario
 {
     public class DummyItemMarioFireFlower : ModItem
     {
@@ -26,10 +26,10 @@ namespace MarioLandMod.Items.Transformation.PowerUp
             int MarioFireFlowerLegs = Mod.GetEquipSlot(Name, EquipType.Legs);
 
 
-                ArmorIDs.Head.Sets.DrawHead[MarioFireFlowerHead] = false;
-                ArmorIDs.Body.Sets.HidesTopSkin[MarioFireFlowerBody] = true;
-                ArmorIDs.Body.Sets.HidesArms[MarioFireFlowerBody] = true;
-                ArmorIDs.Legs.Sets.HidesBottomSkin[MarioFireFlowerLegs] = true;
+            ArmorIDs.Head.Sets.DrawHead[MarioFireFlowerHead] = false;
+            ArmorIDs.Body.Sets.HidesTopSkin[MarioFireFlowerBody] = true;
+            ArmorIDs.Body.Sets.HidesArms[MarioFireFlowerBody] = true;
+            ArmorIDs.Legs.Sets.HidesBottomSkin[MarioFireFlowerLegs] = true;
         }
     }
 }

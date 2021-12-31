@@ -79,7 +79,7 @@ namespace MarioLandMod.Projectiles
                 Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke);
             }
 
-            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/PowerUps/FireFlowerFireballKill"), Main.LocalPlayer.Center);
+            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/PowerUps/FireFlowerFireballKill"), Main.LocalPlayer.Center);
         }
     }
 }

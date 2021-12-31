@@ -1,6 +1,7 @@
 using MarioLandMod.Items.PowerUp;
 using MarioLandMod.Items.Transformation;
-using MarioLandMod.Items.Transformation.PowerUp;
+using MarioLandMod.Items.Transformation.PowerUp.Mario;
+using MarioLandMod.Items.Transformation.PowerUp.Luigi;
 using MarioLandMod.UI;
 using MarioLandMod.UI.Elements;
 using Microsoft.Xna.Framework;
@@ -578,7 +579,7 @@ namespace MarioLandMod
         {
             if (!Main.gameMenu)
             {
-                if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive)
+                if (Main.LocalPlayer.GetModPlayer<MarioLandModPlayer>().TransformationVisualActive)
                 {
                     orig(ModContent.GetInstance<SlotUI>().DyeItem.dye, out localShaderIndex, out shaderType);
                     return;
@@ -586,11 +587,6 @@ namespace MarioLandMod
             }
 
             orig(packedShaderIndex, out localShaderIndex, out shaderType);
-        }
-
-        private bool ItemSlot_AccessorySwap(On.Terraria.UI.ItemSlot.orig_AccessorySwap orig, Player player, Item item, ref Item result)
-        {
-            return !(item.type == ModContent.ItemType<TransformationItemMario>() || item.type == ModContent.ItemType<FireFlower>());
         }
 
         public override void Load()
@@ -607,7 +603,6 @@ namespace MarioLandMod
             On.Terraria.Player.UpdateArmorSets += UpdateArmorSets;
             On.Terraria.Player.UpdateVisibleAccessories += UpdateVisibleAccessories; */
             On.Terraria.DataStructures.PlayerDrawHelper.UnpackShader += UnpackShader;
-            On.Terraria.UI.ItemSlot.AccessorySwap += ItemSlot_AccessorySwap;
 
             if (!Main.dedServ)
             {

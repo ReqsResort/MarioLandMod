@@ -10,7 +10,7 @@ namespace MarioLandMod.UI
     {
         public override bool CanAcceptItem(Item checkItem, AccessorySlotType context)
         {
-            if (context == AccessorySlotType.FunctionalSlot) return checkItem.type == ModContent.ItemType<TransformationItemMario>();
+            if (context == AccessorySlotType.FunctionalSlot) return checkItem.type == ModContent.ItemType<TransformationItemMario>() || checkItem.type == ModContent.ItemType<TransformationItemLuigi>();
             if (context == AccessorySlotType.VanitySlot) return checkItem.type == ModContent.ItemType<FireFlower>();
             else return false;
         }
@@ -35,11 +35,6 @@ namespace MarioLandMod.UI
             if (context == AccessorySlotType.FunctionalSlot) Main.hoverItemName = "Transformation";
             if (context == AccessorySlotType.VanitySlot) Main.hoverItemName = "PowerUp";
             if (context == AccessorySlotType.DyeSlot) Main.hoverItemName = "Transformation Dye";
-        }
-
-        public override bool ModifyDefaultSwapSlot(Item item, int accSlotToSwapTo)
-        {
-            return false;
         }
     }
 }

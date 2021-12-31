@@ -11,7 +11,6 @@ namespace MarioLandMod.Buffs.PowerUp
             Description.SetDefault($"You have the powers of the Fire Flower! You can now:\n- Press LMB with any weapon in your hand to set targets on fire for a few seconds\n- Press LMB with nothing on hand to fire out bouncing fireballs");
 
             Main.buffNoTimeDisplay[Type] = true;
-            CanBeCleared = false;
             Main.debuff[Type] = true;
         }
 

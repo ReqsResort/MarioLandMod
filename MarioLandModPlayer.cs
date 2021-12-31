@@ -3,7 +3,8 @@ using MarioLandMod.Buffs.Transformation;
 using MarioLandMod.Dusts;
 using MarioLandMod.Items.PowerUp;
 using MarioLandMod.Items.Transformation;
-using MarioLandMod.Items.Transformation.PowerUp;
+using MarioLandMod.Items.Transformation.PowerUp.Mario;
+using MarioLandMod.Items.Transformation.PowerUp.Luigi;
 using MarioLandMod.Projectiles;
 using MarioLandMod.UI;
 using Microsoft.Xna.Framework;
@@ -12,6 +13,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.Audio;
 using Terraria.DataStructures;
+using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
 
@@ -23,15 +25,19 @@ namespace MarioLandMod
         public float SlotUITop;
 
         public bool TransformationActive;
-        public bool TransformationActive_Mario;
+        public bool TransformationVisualActive;
+
+        public bool TransformationActive_Mario = false;
+        public bool TransformationActive_Luigi = false;
 
         public bool PowerUpActive;
-        public bool PowerUpActive_FireFlower;
+        public bool PowerUpActive_FireFlower = false;
 
         public int jumpCounter = 0;
-        public int jumpCooldown;
         public float jumpDamageValue;
-        public float jumpKnockbackValue;
+
+        public float oldPlayerPositionX;
+        public int spikedBoots = 1;
 
         public bool JustPressedUseItem = false;
 
@@ -62,6 +68,15 @@ namespace MarioLandMod
 
         #endregion
 
+        public override void ResetEffects()
+        {
+            TransformationVisualActive = false;
+            TransformationActive_Mario = false;
+            TransformationActive_Luigi = false;
+
+            PowerUpActive_FireFlower = false;
+        }
+
         /* public override void SetControls()
         {
             if (TransformationActive)
@@ -73,7 +88,7 @@ namespace MarioLandMod
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-            if (TransformationActive)
+            if (TransformationVisualActive)
             {
                 if (ModContent.GetInstance<SlotUI>().DyeItem.IsAir)
                 {
@@ -86,8 +101,8 @@ namespace MarioLandMod
             }
         }
 
-        public int[] TransformationItems = new int[] { ModContent.ItemType<TransformationItemMario>() };
-        public int[] TransformationBuffs = new int[] { ModContent.BuffType<TransformationBuffMario>() };
+        public int[] TransformationItems = new int[] { ModContent.ItemType<TransformationItemMario>(), ModContent.ItemType<TransformationItemLuigi>() };
+        public int[] TransformationBuffs = new int[] { ModContent.BuffType<TransformationBuffMario>(), ModContent.BuffType<TransformationBuffLuigi>() };
 
         public int[] PowerUpItems = new int[] { ModContent.ItemType<FireFlower>() };
         public int[] PowerUpBuffs = new int[] { ModContent.BuffType<PowerUpBuffFireFlower>() };
@@ -100,12 +115,26 @@ namespace MarioLandMod
                 {
                     for (int i = 0; i < 15; i++)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOn"), Main.LocalPlayer.Center);
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Custom/Transformation/Transformation{name}"), Main.LocalPlayer.Center);
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOn"), Main.LocalPlayer.Center);
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Transformation/Transformation{name}"), Main.LocalPlayer.Center);
                         Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
                     }
 
                     Player.AddBuff(TransformationBuffs[index], 2);
+                }
+
+                if (Player.wet || Player.lavaWet || Player.lavaWet)
+                {
+                    if (PlayerInput.Triggers.JustPressed.Jump) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Swim"), Main.LocalPlayer.Center);
+                }
+                else
+                {
+                    if (Player.justJumped) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Jumps/SingleJump"), Main.LocalPlayer.Center);
+
+                    if ((Player.legFrame.Y == 11 * 56 || Player.legFrame.Y == 18 * 56) && (Player.velocity.X > 0.5f || Player.velocity.X < -0.5f))
+                    {
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Walk"), Main.LocalPlayer.Center);
+                    }
                 }
             }
             else
@@ -114,7 +143,7 @@ namespace MarioLandMod
                 {
                     for (int i = 0; i < 15; i++)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOff"), Main.LocalPlayer.Center);
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOff"), Main.LocalPlayer.Center);
                         Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
                     }
 
@@ -131,7 +160,7 @@ namespace MarioLandMod
                 {
                     for (int i = 0; i < 15; i++)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOn"), Main.LocalPlayer.Center);
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOn"), Main.LocalPlayer.Center);
                         Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
                     }
                     Player.AddBuff(PowerUpBuffs[index], 2);
@@ -143,7 +172,7 @@ namespace MarioLandMod
                 {
                     for (int i = 0; i < 15; i++)
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Transformation/TransformationOff"), Main.LocalPlayer.Center);
+                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOff"), Main.LocalPlayer.Center);
                         Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
                     }
 
@@ -154,10 +183,8 @@ namespace MarioLandMod
 
         public override void PreUpdate()
         {
-            TransformationActive_Mario = ModContent.GetInstance<SlotUI>().FunctionalItem.type == ModContent.ItemType<TransformationItemMario>();
-            TransformationActive = TransformationActive_Mario;
+            TransformationActive = TransformationActive_Mario || TransformationActive_Luigi;
 
-            PowerUpActive_FireFlower = (TransformationActive_Mario) && ModContent.GetInstance<SlotUI>().VanityItem.type == ModContent.ItemType<FireFlower>();
             PowerUpActive = PowerUpActive_FireFlower;
 
             /* for (int i = 0; i < Player.MaxBuffs; i++)
@@ -182,132 +209,115 @@ namespace MarioLandMod
                 SlotUITop = 258;
             }
 
+            NerfedWallKick();
+
             TransformationSwitch(0, "Mario", TransformationActive_Mario);
+            TransformationSwitch(1, "Luigi", TransformationActive_Luigi);
+
             PowerUpSwitch(0, PowerUpActive_FireFlower);
-
-            if (TransformationActive)
-            {
-                JumpAndStompMechanics();
-            }
-
             FireFlowerMechanics();
+
+            if (Player.velocity.Y == 0) jumpCounter = 0;
+
+            if (jumpCounter <= 3) jumpDamageValue = 2 * (20f - (jumpCounter - 1) * 5);
+            else jumpDamageValue = 8;
         }
 
         public override void FrameEffects()
         {
-            if (TransformationActive_Mario)
+            if (TransformationVisualActive)
             {
-                if (PowerUpActive_FireFlower)
+                if (TransformationActive_Mario)
                 {
-                    var DummyItemMarioFireFlower = ModContent.GetInstance<DummyItemMarioFireFlower>();
+                    if (PowerUpActive_FireFlower)
+                    {
+                        var DummyItemMarioFireFlower = ModContent.GetInstance<DummyItemMarioFireFlower>();
 
-                    Player.head = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Head);
-                    Player.body = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Body);
-                    Player.legs = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Legs);
+                        Player.head = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Head);
+                        Player.body = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Body);
+                        Player.legs = Mod.GetEquipSlot(DummyItemMarioFireFlower.Name, EquipType.Legs);
+                    }
+                    else
+                    {
+                        var TransformationItemMario = ModContent.GetInstance<TransformationItemMario>();
+
+                        Player.head = Mod.GetEquipSlot(TransformationItemMario.Name, EquipType.Head);
+                        Player.body = Mod.GetEquipSlot(TransformationItemMario.Name, EquipType.Body);
+                        Player.legs = Mod.GetEquipSlot(TransformationItemMario.Name, EquipType.Legs);
+                    }
                 }
-                else
-                {
-                    var TransformationItemMario = ModContent.GetInstance<TransformationItemMario>();
 
-                    Player.head = Mod.GetEquipSlot(TransformationItemMario.Name, EquipType.Head);
-                    Player.body = Mod.GetEquipSlot(TransformationItemMario.Name, EquipType.Body);
-                    Player.legs = Mod.GetEquipSlot(TransformationItemMario.Name, EquipType.Legs);
+                if (TransformationActive_Luigi)
+                {
+                    if (PowerUpActive_FireFlower)
+                    {
+                        var DummyItemLuigiFireFlower = ModContent.GetInstance<DummyItemLuigiFireFlower>();
+
+                        Player.head = Mod.GetEquipSlot(DummyItemLuigiFireFlower.Name, EquipType.Head);
+                        Player.body = Mod.GetEquipSlot(DummyItemLuigiFireFlower.Name, EquipType.Body);
+                        Player.legs = Mod.GetEquipSlot(DummyItemLuigiFireFlower.Name, EquipType.Legs);
+                    }
+                    else
+                    {
+                        var TransformationItemLuigi = ModContent.GetInstance<TransformationItemLuigi>();
+
+                        Player.head = Mod.GetEquipSlot(TransformationItemLuigi.Name, EquipType.Head);
+                        Player.body = Mod.GetEquipSlot(TransformationItemLuigi.Name, EquipType.Body);
+                        Player.legs = Mod.GetEquipSlot(TransformationItemLuigi.Name, EquipType.Legs);
+                    }
                 }
             }
         }
 
-        private void JumpAndStompMechanics()
+        public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            Player.armorEffectDrawShadow = false;
+            // Stomping mechanics
 
-            if (jumpCooldown > 0)
+            if (damageSource.SourceNPCIndex > -1)
             {
-                jumpCooldown--;
-            }
-
-            if (Player.velocity.Y == 0)
-            {
-                jumpCounter = 0;
-                Player.fullRotation = 0;
-            }
-
-            for (int i = 0; i < 200; i++)
-            {
-                NPC npc = Main.npc[i];
-
-                if (Collision.CanHit(Player.position, Player.width, Player.height, npc.position, npc.width, npc.height) && Player.Hitbox.Bottom > npc.Hitbox.Top && Player.velocity.Y > 0f && npc.active && !npc.townNPC && Math.Atan2(npc.Center.Y - Player.Center.Y, npc.Center.X - Player.Center.X) > 1 && Math.Atan2(npc.Center.Y - Player.Center.Y, npc.Center.X - Player.Center.X) < 2)
+                NPC npc = Main.npc[damageSource.SourceNPCIndex];
+                if (TransformationActive)
                 {
-                    Player.fullRotation = 0;
+                    if (Main.myPlayer == Player.whoAmI && Player.velocity.Y > 0 && Player.Hitbox.Bottom > npc.Hitbox.Top && Math.Atan2(npc.Center.Y - Player.Center.Y, npc.Center.X - Player.Center.X) > 1 && !Player.immune)
+                    {
+                        Player.armorEffectDrawShadow = false;
 
-                    if (!Player.controlDown)
-                    {
-                        jumpKnockbackValue = 2.5f;
-                    }
-                    else
-                    {
-                        jumpKnockbackValue = 7.5f;
-                    }
+                        if (Player.controlJump) Player.velocity.Y = -11f;
+                        else Player.velocity.Y = -9f;
 
-                    if (jumpCounter <= 3)
-                    {
-                        if (!Player.controlDown)
-                        {
-                            jumpDamageValue = (20f - (jumpCounter - 1) * 5);
-                        }
+                        for (int d = 0; d < 3; d++) Dust.NewDust(npc.Top, Player.width, Player.height, ModContent.DustType<StompDust>());
+
+                        if (jumpCounter < 7) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Actions/Stomps/Stomp_{jumpCounter}"), Main.LocalPlayer.Center);
                         else
                         {
-                            jumpDamageValue = 2 * (20f - (jumpCounter - 1) * 5);
+                            Player.statLife += Player.statLifeMax2 / (jumpCounter * 3);
+                            Player.HealEffect(Player.statLifeMax2 / (jumpCounter * 3), true);
+
+                            SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Stomps/StompHeal"), Main.LocalPlayer.Center);
                         }
-                    }
-                    else
-                    {
-                        jumpDamageValue = 8;
-                    }
 
-                    if (!Player.controlDown)
-                    {
-                        if (Player.controlJump)
-                        {
-                            Player.velocity.Y = -8f;
-                        }
-                        else
-                        {
-                            Player.velocity.Y = -6f;
-                        }
-                    }
-
-                    if (jumpCooldown <= 0)
-                    {
-                        if ((!(Player.controlDown && Player.controlJump)))
-                        {
-                            Player.immune = true;
-                            Player.immuneNoBlink = true;
-                            Player.immuneTime = 10;
-                            Player.ApplyDamageToNPC(npc, (int)jumpDamageValue, jumpKnockbackValue, Player.direction, false);
-
-                            for (int d = 0; d < 3; d++)
-                            {
-                                Dust.NewDust(npc.Top, Player.width, Player.height, ModContent.DustType<StompDust>());
-                            }
-
-                            if (jumpCounter < 7)
-                            {
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Custom/Actions/Stomps/Stomp_{jumpCounter}"), Main.LocalPlayer.Center);
-                            }
-                            else
-                            {
-                                Player.statLife += Player.statLifeMax2 / (jumpCounter * 3);
-                                Player.HealEffect(Player.statLifeMax2 / (jumpCounter * 3), true);
-
-                                SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/Actions/Stomps/StompHeal"), Main.LocalPlayer.Center);
-
-                            }
-
-                            jumpCounter++;
-                            jumpCooldown = 28;
-                        }
+                        Player.immune = true;
+                        Player.immuneNoBlink = true;
+                        Player.immuneTime = 5;
+                        Player.ApplyDamageToNPC(npc, (int)jumpDamageValue * 2, 0, 0, false);
+                        jumpCounter++;
+                        return false;
                     }
                 }
+            }
+            return true;
+        }
+
+        private void NerfedWallKick()
+        {
+            if (TransformationActive)
+            {
+                if (Player.velocity.Y == 0) oldPlayerPositionX = 0;
+
+                if (Player.sliding && PlayerInput.Triggers.JustPressed.Jump) oldPlayerPositionX = Player.position.X;
+
+                if (oldPlayerPositionX == Player.position.X || oldPlayerPositionX == Player.position.X) spikedBoots = 0;
+                else spikedBoots = 1;
             }
         }
 
@@ -328,7 +338,7 @@ namespace MarioLandMod
             {
                 if (!JustPressedUseItem)
                 {
-                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Custom/PowerUps/FireFlowerFireball"), Main.LocalPlayer.Center);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/PowerUps/FireFlowerFireball"), Main.LocalPlayer.Center);
                     Projectile.NewProjectile(Player.GetProjectileSource_Buff(Player.FindBuffIndex(ModContent.BuffType<PowerUpBuffFireFlower>())), Player.Center, new Vector2(5f * Player.direction, default), ModContent.ProjectileType<FireFlowerProjectile>(), 10, 2.5f, Player.whoAmI);
 
                     JustPressedUseItem = true;

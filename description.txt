@@ -4,4 +4,4 @@ With this mod you can play as Mario, Luigi, Wario, Waluigi, and any other charac
 
 THIS MOD IS AN ALPHA VERSION. MUCH LIKE TML, MUCH OF THE CONTENT OF THE MOD HASN'T MADE IT IN YET, AND WILL SLOWLY BE PUT INTO THE MOD WITH REGULAR UPDATES.
 
-Speaking of which, I recommend going into the character creation menu, since that is currently the only way to obtain available transformation items and PowerUps :)
+Speaking of which, the only way to get the items currently is by using cheat mods. A proper implementation is in the works.
