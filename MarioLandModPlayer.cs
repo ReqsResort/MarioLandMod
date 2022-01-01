@@ -16,6 +16,7 @@ using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
+using MLSandbox.Sounds.Transformation;
 
 namespace MarioLandMod
 {
@@ -107,20 +108,18 @@ namespace MarioLandMod
         public int[] PowerUpItems = new int[] { ModContent.ItemType<FireFlower>() };
         public int[] PowerUpBuffs = new int[] { ModContent.BuffType<PowerUpBuffFireFlower>() };
 
+        bool WalkSoundPlayed = false;
         private void TransformationSwitch(int index, string name, bool on)
         {
             if (on)
             {
                 if (!Player.HasBuff(TransformationBuffs[index]))
                 {
-                    for (int i = 0; i < 15; i++)
-                    {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOn"), Main.LocalPlayer.Center);
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Transformation/Transformation{name}"), Main.LocalPlayer.Center);
-                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
-                    }
+                    for (int i = 0; i < 15; i++) Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
 
                     Player.AddBuff(TransformationBuffs[index], 2);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOn"), Main.LocalPlayer.Center);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Transformation/Transformation{name}"), Main.LocalPlayer.Center);
                 }
 
                 if (Player.wet || Player.lavaWet || Player.lavaWet)
@@ -131,23 +130,22 @@ namespace MarioLandMod
                 {
                     if (Player.justJumped) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Jumps/SingleJump"), Main.LocalPlayer.Center);
 
-                    if ((Player.legFrame.Y == 11 * 56 || Player.legFrame.Y == 18 * 56) && (Player.velocity.X > 0.5f || Player.velocity.X < -0.5f))
+                    if ((Player.legFrame.Y == 11 * 56 || Player.legFrame.Y == 18 * 56) && (Player.velocity.X < ((Player.accRunSpeed + Player.maxRunSpeed) * 0.75f) && Player.velocity.X > -((Player.accRunSpeed + Player.maxRunSpeed) * 0.75f)))
                     {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Walk"), Main.LocalPlayer.Center);
+                        if (!WalkSoundPlayed) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Actions/Walk"), Main.LocalPlayer.Center);
+                        WalkSoundPlayed = true;
                     }
+                    else WalkSoundPlayed = false;
                 }
             }
             else
             {
                 if (Player.HasBuff(TransformationBuffs[index]))
                 {
-                    for (int i = 0; i < 15; i++)
-                    {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOff"), Main.LocalPlayer.Center);
-                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
-                    }
+                    for (int i = 0; i < 15; i++) Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
 
                     Player.ClearBuff(TransformationBuffs[index]);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOff"), Main.LocalPlayer.Center);
                 }
             }
         }
@@ -158,25 +156,20 @@ namespace MarioLandMod
             {
                 if (!Player.HasBuff(PowerUpBuffs[index]))
                 {
-                    for (int i = 0; i < 15; i++)
-                    {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOn"), Main.LocalPlayer.Center);
-                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
-                    }
+                    for (int i = 0; i < 15; i++) Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
+
                     Player.AddBuff(PowerUpBuffs[index], 2);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOn"), Main.LocalPlayer.Center);
                 }
             }
             else
             {
                 if (Player.HasBuff(PowerUpBuffs[index]))
                 {
-                    for (int i = 0; i < 15; i++)
-                    {
-                        SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOff"), Main.LocalPlayer.Center);
-                        Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
-                    }
+                    for (int i = 0; i < 15; i++) Dust.NewDust(Player.position, Player.width, Player.height, ModContent.DustType<TransformationDust>());
 
                     Player.ClearBuff(PowerUpBuffs[index]);
+                    SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, "Sounds/Transformation/TransformationOff"), Main.LocalPlayer.Center);
                 }
             }
         }

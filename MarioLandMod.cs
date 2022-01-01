@@ -1,7 +1,5 @@
-using MarioLandMod.Items.PowerUp;
 using MarioLandMod.Items.Transformation;
 using MarioLandMod.Items.Transformation.PowerUp.Mario;
-using MarioLandMod.Items.Transformation.PowerUp.Luigi;
 using MarioLandMod.UI;
 using MarioLandMod.UI.Elements;
 using Microsoft.Xna.Framework;

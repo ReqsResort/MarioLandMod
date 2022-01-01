@@ -63,6 +63,7 @@ namespace MarioLandMod.Items.Transformation
         {
             tooltips.RemoveAll(tooltip => tooltip.Name != "ItemName");
             tooltips.Add(new TooltipLine(Mod, "Transformation", "Transforms the player into Super Mario"));
+            tooltips.Add(new TooltipLine(Mod, "Disclaimer", "Currently isn't functional. You will only get the buff."));
         }
     }
 }

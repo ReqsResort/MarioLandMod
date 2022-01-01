@@ -1,5 +1,4 @@
-﻿using MarioLandMod.UI;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Terraria;
 using Terraria.GameContent.Creative;
 using Terraria.ID;
@@ -39,6 +38,7 @@ namespace MarioLandMod.Items.PowerUp
         {
             tooltips.RemoveAll(tooltip => tooltip.Name != "ItemName");
             tooltips.Add(new TooltipLine(Mod, "Transformation", "Transforms Super Mario or Super Luigi into Fire Mario or Fire Luigi respectively"));
+            tooltips.Add(new TooltipLine(Mod, "Disclaimer", "Currently isn't functional. You will only get the buff."));
         }
     }
 }
