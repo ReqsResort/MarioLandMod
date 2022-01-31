@@ -15,7 +15,6 @@ namespace MarioLandMod.Items.Transformation
             CreativeItemSacrificesCatalog.Instance.SacrificeCountNeededByItemId[Type] = 1;
 
             SetupDrawing();
-            ItemID.Sets.Deprecated[Type] = true;
         }
 
         public override void SetDefaults()

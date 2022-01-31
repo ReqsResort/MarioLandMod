@@ -31,7 +31,7 @@ namespace MarioLandMod
         UIColoredImageButton marioLandModCategoryButton;
 
         string[] Transformations = new string[] { "Mario", "Luigi", "Wario", "Waluigi" };
-        string[] PowerUps = new string[] { "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Jet Pot", "Jet Pot", "Jet Pot" };
+        string[] PowerUps = new string[] { "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot", "Fire Flower", "Super Leaf", "Cape Feather", "Frog Suit", "Jet Pot" };
 
         TransformationSelectButton TransformationButton;
         readonly TransformationSelectButton[] TransformationButtons = new TransformationSelectButton[4];
@@ -85,7 +85,71 @@ namespace MarioLandMod
             container.Append(uIElement);
             MarioLandModCategoryContainer = uIElement;
 
-            for (int i = 0; i < 4; i++)
+            UIElement MainPanel = new()
+            {
+                Width = StyleDimension.FromPercent(0.2f),
+                Height = StyleDimension.FromPercent(0.8f),
+                HAlign = 0.5f,
+                VAlign = 0.5f,
+                OverflowHidden = true
+            };
+
+            MarioLandModCategoryContainer.Append(MainPanel);
+
+            UIList uIList = new UIList
+            {
+                Width = StyleDimension.FromPixelsAndPercent(-18f, 1f),
+                Height = StyleDimension.FromPixelsAndPercent(-6f, 1f),
+                Left = StyleDimension.FromPixels(15f)
+            };
+            uIList.SetPadding(4f);
+            MainPanel.Append(uIList);
+            UIScrollbar uIScrollbar = new UIScrollbar
+            {
+                Height = StyleDimension.FromPixelsAndPercent(-30f, 1f),
+                Top = StyleDimension.FromPixels(10f)
+            };
+            uIScrollbar.SetView(100f, 1000f);
+            uIList.SetScrollbar(uIScrollbar);
+            MainPanel.Append(uIScrollbar);
+            int count = PowerUps.Length;
+            UIPanel uIElement2 = new()
+            {
+                Width = StyleDimension.FromPixelsAndPercent(0f, 1f),
+                Height = StyleDimension.FromPixelsAndPercent(48 * (count / 10 + ((count % 10 != 0) ? 1 : 0)), 0f)
+            };
+            uIList.Add(uIElement2);
+            uIElement2.SetPadding(0f);
+            for (int i = 0; i < count; i++)
+            {
+                PowerUpButton = new($"MarioLandMod/UI/Textures/TransformationSelectionUI/PowerUpButtonTextures/TransformationButtonTexture{PowerUps[i].Replace(" ", string.Empty)}")
+                {
+                    Left = StyleDimension.FromPixels((float)(i % 3) * 46f + 6f),
+                    Top = StyleDimension.FromPixels((float)(i / 10) * 48f + 1f)
+                };
+                PowerUpButton.SetSnapPoint("Middle", i);
+                uIElement2.Append(PowerUpButton);
+            }
+
+            /* UIPanel Panel = new()
+            {
+                Width = StyleDimension.FromPercent(0.3f),
+                Height = StyleDimension.FromPercent(0.3f),
+                HAlign = 2f,
+                VAlign = 0.5f
+            };
+
+            HorizontalScrollbar Scrollbar = new()
+            {
+                Width = StyleDimension.FromPercent(1f)
+            };
+
+            Scrollbar.SetView(250f, 1000f);
+
+            MainPanel.Append(Scrollbar);
+            MainPanel.Append(Panel); */
+
+            /* for (int i = 0; i < 4; i++)
             {
                 TransformationButton = new($"MarioLandMod/UI/Textures/TransformationSelectionUI/TransformationButtonTextures/TransformationButtonTexture{Transformations[i].Replace(" ", string.Empty)}")
                 {
@@ -146,7 +210,7 @@ namespace MarioLandMod
 
             MarioLandModCategoryContainer.Append(SelectedTransformationPanel);
 
-            SelectedTransformationInfoText = new("Select a transformation and / or PowerUp to begin with on your journey, if you want.\n(You need to have a transformation selected in order to select a PowerUp)", 0.9f, false)
+            SelectedTransformationInfoText = new("Select a transformation to begin with on your journey. You can only select a Power-Up if you have already selected a transformation", 0.9f, false)
             {
                 HAlign = 0f,
                 VAlign = 0.5f,
@@ -158,10 +222,10 @@ namespace MarioLandMod
                 IsWrapped = true
             };
 
-            SelectedTransformationPanel.Append(SelectedTransformationInfoText);
+            SelectedTransformationPanel.Append(SelectedTransformationInfoText); */
         }
 
-        private void TransformationButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
+        /* private void TransformationButton_OnClick(UIMouseEvent evt, UIElement listeningElement)
         {
             SoundEngine.PlaySound(12);
 
@@ -304,7 +368,7 @@ namespace MarioLandMod
             {
                 PowerUpButtons[i].SetHovering(false);
             }
-        }
+        } */
 
         private void Click_MarioLandModCategory(UICharacterCreation self)
         {
@@ -452,7 +516,7 @@ namespace MarioLandMod
             c.MarkLabel(statementFalse);
         }
 
-        private void UICharacterCreation_Draw(On.Terraria.GameContent.UI.States.UICharacterCreation.orig_Draw orig, UICharacterCreation self, SpriteBatch spriteBatch)
+        /* private void UICharacterCreation_Draw(On.Terraria.GameContent.UI.States.UICharacterCreation.orig_Draw orig, UICharacterCreation self, SpriteBatch spriteBatch)
         {
             if (MarioLandModCategorySelected)
             {
@@ -545,7 +609,7 @@ namespace MarioLandMod
             }
 
             orig(self, spriteBatch);
-        }
+        } */
 
         #endregion
 
@@ -595,7 +659,7 @@ namespace MarioLandMod
             IL.Terraria.GameContent.UI.States.UICharacterCreation.MakeClothStylesMenu += MakeClothStylesMenu;
             IL.Terraria.GameContent.UI.States.UICharacterCreation.MakeHairsylesMenu += MakeHairsylesMenu;
             On.Terraria.GameContent.UI.States.UICharacterCreation.UnselectAllCategories += UnselectAllCategories;
-            On.Terraria.GameContent.UI.States.UICharacterCreation.Draw += UICharacterCreation_Draw;
+            // On.Terraria.GameContent.UI.States.UICharacterCreation.Draw += UICharacterCreation_Draw;
 
             /* On.Terraria.Player.UpdateEquips += UpdateEquips;
             On.Terraria.Player.UpdateArmorSets += UpdateArmorSets;

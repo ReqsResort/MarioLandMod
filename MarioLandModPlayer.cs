@@ -16,7 +16,7 @@ using Terraria.DataStructures;
 using Terraria.GameInput;
 using Terraria.ID;
 using Terraria.ModLoader;
-using MLSandbox.Sounds.Transformation;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace MarioLandMod
 {
@@ -89,17 +89,7 @@ namespace MarioLandMod
 
         public override void ModifyDrawInfo(ref PlayerDrawSet drawInfo)
         {
-            if (TransformationVisualActive)
-            {
-                if (ModContent.GetInstance<SlotUI>().DyeItem.IsAir)
-                {
-                    Player.cHead = Player.cBody = Player.cLegs = 0;
-                }
-                else
-                {
-                    Player.cHead = Player.cBody = Player.cLegs = ModContent.GetInstance<SlotUI>().DyeItem.dye;
-                }
-            }
+            if (TransformationVisualActive) Player.cHead = Player.cBody = Player.cLegs = ModContent.GetInstance<SlotUI>().DyeItem.IsAir ? 0 : ModContent.GetInstance<SlotUI>().DyeItem.dye;
         }
 
         public int[] TransformationItems = new int[] { ModContent.ItemType<TransformationItemMario>(), ModContent.ItemType<TransformationItemLuigi>() };
@@ -216,7 +206,7 @@ namespace MarioLandMod
             else jumpDamageValue = 8;
         }
 
-        public override void FrameEffects()
+        /* public override void FrameEffects()
         {
             if (TransformationVisualActive)
             {
@@ -260,11 +250,13 @@ namespace MarioLandMod
                     }
                 }
             }
-        }
+        } */
 
         public override bool PreHurt(bool pvp, bool quiet, ref int damage, ref int hitDirection, ref bool crit, ref bool customDamage, ref bool playSound, ref bool genGore, ref PlayerDeathReason damageSource)
         {
-            // Stomping mechanics
+            if (TransformationActive) playSound = false;
+
+            #region Stomping Mechanics
 
             if (damageSource.SourceNPCIndex > -1)
             {
@@ -298,7 +290,15 @@ namespace MarioLandMod
                     }
                 }
             }
+            #endregion
+
             return true;
+        }
+
+        public override void PostHurt(bool pvp, bool quiet, double damage, int hitDirection, bool crit)
+        {
+            if (TransformationActive_Mario) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Mario/MarioHurt{Main.rand.Next(0, 3)}"));
+            if (TransformationActive_Luigi) SoundEngine.PlaySound(SoundLoader.GetLegacySoundSlot(Mod, $"Sounds/Luigi/LuigiHurt{Main.rand.Next(0, 3)}"));
         }
 
         private void NerfedWallKick()
