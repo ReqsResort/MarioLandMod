@@ -8,10 +8,6 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Items\PowerUp\PowerUpItem.cs" />
-    <Compile Remove="Items\Transformation\TransformationItem.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="DiscordRichPresence" Version="1.0.175" />
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
