@@ -1,4 +1,4 @@
 displayName = Mario Land Mod
 author = MLM Developers
-version = 0.0.16
+version = 0.0.17
 homepage = https://discord.gg/FdkEw35fye

@@ -32,7 +32,7 @@ namespace MarioLand
     {
         public override Position GetDefaultPosition()
         {
-            return new BeforeParent(PlayerDrawLayers.HeldItem);
+            return new AfterParent(PlayerDrawLayers.HeldItem);
         }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -60,7 +60,7 @@ namespace MarioLand
     {
         public override Position GetDefaultPosition()
         {
-            return new BeforeParent(PlayerDrawLayers.Wings);
+            return new BeforeParent(PlayerDrawLayers.HeldItem);
         }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -88,7 +88,7 @@ namespace MarioLand
     {
         public override Position GetDefaultPosition()
         {
-            return new BeforeParent(PlayerDrawLayers.Wings);
+            return new BeforeParent(PlayerDrawLayers.HeldItem);
         }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
@@ -116,7 +116,7 @@ namespace MarioLand
     {
         public override Position GetDefaultPosition()
         {
-            return new BeforeParent(PlayerDrawLayers.Wings);
+            return new BeforeParent(PlayerDrawLayers.HeldItem);
         }
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
