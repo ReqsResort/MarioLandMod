@@ -37,15 +37,14 @@ namespace MarioLand
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
-            MarioLandModPlayer MarioLandModPlayer = drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>();
-            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && MarioLandModPlayer.TransformationActive;
+            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive;
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
 
-            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().armsPath;
+            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationTexture;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.bodyFrame.Width / 2, drawPlayer.height - drawPlayer.bodyFrame.Height + 4f) + drawPlayer.bodyPosition;
             Vector2 bodyVect = drawInfo.bodyVect;
             DrawData drawData = new(texture, drawPos.Floor() + bodyVect, drawPlayer.bodyFrame, Color.White, drawPlayer.bodyRotation, bodyVect, 1f, drawInfo.playerEffect, 0)
@@ -65,18 +64,17 @@ namespace MarioLand
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
-            MarioLandModPlayer MarioLandModPlayer = drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>();
-            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && MarioLandModPlayer.TransformationActive;
+            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive;
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
 
-            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().headPath;
+            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationTexture;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.bodyFrame.Width / 2, drawPlayer.height - drawPlayer.bodyFrame.Height + 4f) + drawPlayer.headPosition;
             Vector2 headVect = drawInfo.headVect;
-            DrawData drawData = new(texture, drawPos.Floor() + headVect, drawPlayer.bodyFrame, Color.White, drawPlayer.headRotation, headVect, 1f, drawInfo.playerEffect, 0)
+            DrawData drawData = new(texture, drawPos.Floor() + headVect, new Rectangle(40, drawPlayer.bodyFrame.Top, drawPlayer.bodyFrame.Width, drawPlayer.bodyFrame.Height), Color.White, drawPlayer.headRotation, headVect, 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cHead
             };
@@ -93,18 +91,17 @@ namespace MarioLand
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
-            MarioLandModPlayer MarioLandModPlayer = drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>();
-            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && MarioLandModPlayer.TransformationActive;
+            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive;
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
 
-            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().bodyPath;
+            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationTexture;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.bodyFrame.Width / 2, drawPlayer.height - drawPlayer.bodyFrame.Height + 4f) + drawPlayer.bodyPosition;
             Vector2 bodyVect = drawInfo.bodyVect;
-            DrawData drawData = new(texture, drawPos.Floor() + bodyVect, drawPlayer.bodyFrame, Color.White, drawPlayer.bodyRotation, bodyVect, 1f, drawInfo.playerEffect, 0)
+            DrawData drawData = new(texture, drawPos.Floor() + bodyVect, new Rectangle(80, drawPlayer.bodyFrame.Top, drawPlayer.bodyFrame.Width, drawPlayer.bodyFrame.Height), Color.White, drawPlayer.bodyRotation, bodyVect, 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cBody
             };
@@ -121,18 +118,17 @@ namespace MarioLand
 
         public override bool GetDefaultVisibility(PlayerDrawSet drawInfo)
         {
-            MarioLandModPlayer MarioLandModPlayer = drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>();
-            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && MarioLandModPlayer.TransformationActive;
+            return (!drawInfo.drawPlayer.dead || !drawInfo.drawPlayer.invis) && drawInfo.drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationActive;
         }
 
         protected override void Draw(ref PlayerDrawSet drawInfo)
         {
             Player drawPlayer = drawInfo.drawPlayer;
 
-            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().legsPath;
+            Texture2D texture = drawPlayer.GetModPlayer<MarioLandModPlayer>().TransformationTexture;
             Vector2 drawPos = drawInfo.Position - Main.screenPosition + new Vector2(drawPlayer.width / 2 - drawPlayer.bodyFrame.Width / 2, drawPlayer.height - drawPlayer.bodyFrame.Height + 4f) + drawPlayer.legPosition;
             Vector2 legVect = drawInfo.legVect;
-            DrawData drawData = new(texture, drawPos.Floor() + legVect, drawPlayer.legFrame, Color.White, drawPlayer.legRotation, legVect, 1f, drawInfo.playerEffect, 0)
+            DrawData drawData = new(texture, drawPos.Floor() + legVect, new Rectangle(120, drawPlayer.legFrame.Top, drawPlayer.legFrame.Width, drawPlayer.legFrame.Height), Color.White, drawPlayer.legRotation, legVect, 1f, drawInfo.playerEffect, 0)
             {
                 shader = drawInfo.cLegs
             };

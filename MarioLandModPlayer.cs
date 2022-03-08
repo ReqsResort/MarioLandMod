@@ -8,10 +8,7 @@ namespace MarioLand
 {
     public class MarioLandModPlayer : ModPlayer
     {
-        public Texture2D armsPath;
-        public Texture2D headPath;
-        public Texture2D bodyPath;
-        public Texture2D legsPath;
+        public Texture2D TransformationTexture;
 
         public bool TransformationActive;
         public bool TransformationActive_Mario;
@@ -21,12 +18,9 @@ namespace MarioLand
         public bool PowerUpActive_FireFlower;
         public bool PowerUpActive_IceFlower;
 
-        public void ChangeDrawTextures(string transformation, string type)
+        public void ChangeTransformationTexture(string transformation, string type)
         {
-            armsPath = ModContent.Request<Texture2D>($"MarioLandMod/TransformationTextures/{transformation}/{type}/{transformation}_{type}_Arms").Value;
-            headPath = ModContent.Request<Texture2D>($"MarioLandMod/TransformationTextures/{transformation}/{type}/{transformation}_{type}_Head").Value;
-            bodyPath = ModContent.Request<Texture2D>($"MarioLandMod/TransformationTextures/{transformation}/{type}/{transformation}_{type}_Body").Value;
-            legsPath = ModContent.Request<Texture2D>($"MarioLandMod/TransformationTextures/{transformation}/{type}/{transformation}_{type}_Legs").Value;
+            TransformationTexture = ModContent.Request<Texture2D>($"MarioLandMod/TransformationFiles/{transformation}/Textures/{transformation}_{type}").Value;
         }
 
         public override void ResetEffects()
@@ -54,16 +48,16 @@ namespace MarioLand
 
             if (TransformationActive_Mario)
             {
-                if (!PowerUpActive) ChangeDrawTextures("Mario", "Normal");
-                if (PowerUpActive_FireFlower) ChangeDrawTextures("Mario", "FireFlower");
-                if (PowerUpActive_IceFlower) ChangeDrawTextures("Mario", "IceFlower");
+                if (!PowerUpActive) ChangeTransformationTexture("Mario", "Normal");
+                if (PowerUpActive_FireFlower) ChangeTransformationTexture("Mario", "FireFlower");
+                if (PowerUpActive_IceFlower) ChangeTransformationTexture("Mario", "IceFlower");
             }
 
             if (TransformationActive_Luigi)
             {
-                if (!PowerUpActive) ChangeDrawTextures("Luigi", "Normal");
-                if (PowerUpActive_FireFlower) ChangeDrawTextures("Luigi", "FireFlower");
-                if (PowerUpActive_IceFlower) ChangeDrawTextures("Luigi", "IceFlower");
+                if (!PowerUpActive) ChangeTransformationTexture("Luigi", "Normal");
+                if (PowerUpActive_FireFlower) ChangeTransformationTexture("Luigi", "FireFlower");
+                if (PowerUpActive_IceFlower) ChangeTransformationTexture("Luigi", "IceFlower");
             }
         }
 
