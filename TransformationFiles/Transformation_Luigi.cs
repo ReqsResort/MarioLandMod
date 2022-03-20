@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 
-namespace MarioLandMod.TransformationFiles.Luigi
+namespace MarioLandMod.TransformationFiles
 {
     public class TransformationItem_Luigi : ModItem
     {

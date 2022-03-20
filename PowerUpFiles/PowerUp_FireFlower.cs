@@ -38,6 +38,7 @@ namespace MarioLandMod.PowerUpFiles
         public override void UpdateAccessory(Player player, bool hideVisual)
         {
             player.GetModPlayer<MarioLandModPlayer>().PowerUpActive_FireFlower = true;
+            player.AddBuff(ModContent.BuffType<PowerUpBuff_FireFlower>(), 2);
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -50,6 +51,23 @@ namespace MarioLandMod.PowerUpFiles
         public override bool? PrefixChance(int pre, UnifiedRandom rand)
         {
             return !(pre == -1 || pre == -3);
+        }
+    }
+
+    public class PowerUpBuff_FireFlower : ModBuff
+    {
+        public override void SetStaticDefaults()
+        {
+            DisplayName.SetDefault("Fire Flower");
+            Description.SetDefault($"You have the powers of the Fire Flower");
+
+            Main.buffNoTimeDisplay[Type] = true;
+            Main.debuff[Type] = true;
+        }
+
+        public override void Update(Player player, ref int buffIndex)
+        {
+            player.buffTime[buffIndex] = 10;
         }
     }
 }
