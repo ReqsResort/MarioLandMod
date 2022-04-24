@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\MarioLandMod\\MarioLandMod.csproj": {}
+    "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\MarioLandMod\\MarioLandMod.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\MarioLandMod\\MarioLandMod.csproj": {
+    "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\MarioLandMod\\MarioLandMod.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\MarioLandMod\\MarioLandMod.csproj",
+        "projectUniqueName": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\MarioLandMod\\MarioLandMod.csproj",
         "projectName": "MarioLandMod",
-        "projectPath": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\MarioLandMod\\MarioLandMod.csproj",
+        "projectPath": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\MarioLandMod\\MarioLandMod.csproj",
         "packagesPath": "C:\\Users\\Must Weq\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\MarioLandMod\\obj\\",
+        "outputPath": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\MarioLandMod\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\Must Weq\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -64,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
         }
       }
     }

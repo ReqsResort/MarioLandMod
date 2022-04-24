@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "W2tfBicVMtq1kpa6x4vJQJkLSGOPdPyO7pXx/k3JEkiINKLDls/cdBQ+SIWYX2wv2W15YMAhJ9Rft7ebVxZj6A==",
+  "dgSpecHash": "KuPYZYm5cGE+79JudxuLXeM1yl6GTGOt3isx/hWDrhlX9VYF52uzF9N+/xqxEsYo8HBy1lzpUfFCkRE+/fyKNQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\ModLoader\\Beta\\Mod Sources\\MarioLandMod\\MarioLandMod.csproj",
+  "projectFilePath": "C:\\Users\\Must Weq\\Documents\\My Games\\Terraria\\tModLoader\\ModSources\\MarioLandMod\\MarioLandMod.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Must Weq\\.nuget\\packages\\discordrichpresence\\1.0.175\\discordrichpresence.1.0.175.nupkg.sha512",
     "C:\\Users\\Must Weq\\.nuget\\packages\\microsoft.netcore.platforms\\2.0.0\\microsoft.netcore.platforms.2.0.0.nupkg.sha512",
@@ -10,7 +10,7 @@
     "C:\\Users\\Must Weq\\.nuget\\packages\\newtonsoft.json\\12.0.2\\newtonsoft.json.12.0.2.nupkg.sha512",
     "C:\\Users\\Must Weq\\.nuget\\packages\\system.security.accesscontrol\\4.5.0\\system.security.accesscontrol.4.5.0.nupkg.sha512",
     "C:\\Users\\Must Weq\\.nuget\\packages\\system.security.principal.windows\\4.5.0\\system.security.principal.windows.4.5.0.nupkg.sha512",
-    "C:\\Users\\Must Weq\\.nuget\\packages\\tmodloader.codeassist\\0.1.3\\tmodloader.codeassist.0.1.3.nupkg.sha512"
+    "C:\\Users\\Must Weq\\.nuget\\packages\\tmodloader.codeassist\\0.1.5\\tmodloader.codeassist.0.1.5.nupkg.sha512"
   ],
   "logs": []
 }
